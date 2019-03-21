@@ -62,16 +62,15 @@ var dashModel = function (){
   self.selectFunc = function(){
     let canvas = document.getElementById("currentBP")
     let context = canvas.getContext("2d")
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetWidth / 2;
     context.clearRect(0, 0, canvas.width, canvas.height)
     let path = self.currentBlueprint()['path']
     // console.log(self.currentBlueprint())
     let img = new Image()
     img.src = base_url + '/storage/' + path
     img.addEventListener("load", function() {
-      context.drawImage(img,
-      canvas.width / 2 - img.width / 2,
-      canvas.height / 2 - img.height / 2
-      )
+      context.drawImage(img,0,0, canvas.width, canvas.height);
     })
   }
 
