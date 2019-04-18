@@ -11,7 +11,11 @@ $( document ).ajaxError(function( event, jqXHR, settings, thrownError) {
   } else if (jqXHR.status == 404) {
     msg = 'Requested page not found. [404]'
   } else if (jqXHR.status == 500) {
-    msg = 'Internal Server Error [500].'
+    msg = 'Internal Server Error [500].' + thrownError;
+    console.log(event);
+    console.log(jqXHR);
+    console.log(settings);
+    console.log(thrownError);
   } else if (jqXHR.status == 401) {
     msg = 'Unauthorized.'
     localStorage.removeItem('token')
