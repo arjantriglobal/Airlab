@@ -10,12 +10,15 @@
 |
 */
 Route::get('/', function () {
-	phpinfo();
-  	//return view('index');
+  	return view('index');
 });
 Route::get('/ping', function () {
 	return "pong";
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 

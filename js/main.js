@@ -5,7 +5,7 @@ $.ajaxSetup({
 })
 
 var localStorage = window.localStorage
-var base_url = window.location.origin
+var base_url = window.location.origin + "/old";
 /**
 *
 *   Knockoutjs
