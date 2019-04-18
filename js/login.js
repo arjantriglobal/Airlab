@@ -105,7 +105,10 @@ var loginModel = function (){
 
     }).fail(function(xhr, status, error){
 
-    	 console.log("Login expired")
+      console.log(xhr);
+      console.log(status);
+      console.log(error);
+    	 console.log("Login expired");
     })
 
     })
