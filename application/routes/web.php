@@ -10,11 +10,7 @@
 |
 */
 Route::get('/', function () {
-	phpinfo();
-  	//return view('index');
-});
-Route::get('/ping', function () {
-	return "pong";
+	return view('index');
 });
 
 Auth::routes();
