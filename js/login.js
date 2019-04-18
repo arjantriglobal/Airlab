@@ -4,7 +4,7 @@ $.ajaxSetup({
   }
 })
 var localStorage = window.localStorage
-var base_url = window.location.origin
+var base_url = window.location.origin + "/uhoo"
 $( document ).ajaxError(function( event, jqXHR, settings, thrownError) {
   var msg = ''
   if (jqXHR.status === 0) {

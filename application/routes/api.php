@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get("ping", function(){
+    return "pong";
+});
 Route::post('login', 'AuthController@login');
 Route::post('validate', 'RegisterController@validate');
 Route::post('create', 'RegisterController@create');
