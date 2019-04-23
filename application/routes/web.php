@@ -12,10 +12,7 @@
 Route::get('/', function () {
   	return view('index');
 });
-Route::get('/ping', function () {
-	return "pong";
+Route::get("/info", function () {
+	phpinfo();
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

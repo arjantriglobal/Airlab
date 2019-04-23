@@ -12,6 +12,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
+    // User relationship with organization
     public function organizations()
     {
         return $this->belongsTo('App\Organization');
@@ -45,7 +46,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','organization_id',
     ];
 
     /**

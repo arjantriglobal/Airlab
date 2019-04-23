@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use User;
+use App\Organization;
 
 class AuthController extends Controller
 {
@@ -20,21 +20,18 @@ class AuthController extends Controller
     }
 
     /**
-     * Get a JWT token via given credentials.
-     *
-     * @param  \Illuminate\Http\Request  $request
+     * Get a JWT via given credentials.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login()
     {
-        $credentials = $request->only('email', 'password');
-
-        if ($token = $this->guard()->attempt($credentials)) {
-            return $this->respondWithToken($token);
+        $credentials = request(['email', 'password']);
+        if (! $token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
-
-        return response()->json(['error' => 'Invalid Login Details'], 401);
+        
+        return $this->respondWithToken($token);
     }
 
     /**
@@ -42,9 +39,12 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public static function me()
     {
-        return response()->json($this->guard()->user(), 200);
+        $user = auth()->user()->toArray();
+        $organization = Organization::where('id', $user['organization_id'])->first()->toArray();
+        $user['organization'] = $organization['name'];
+        return $user;
     }
 
     /**
@@ -54,9 +54,19 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        $this->guard()->logout();
-
+        auth()->logout();
         return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    /**
+     * Method to reset password
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function passwordReset(Request $request)
+    {
+      $name = $request->input('email');
+      if (User::where('email', '=', Input::get('email'))->exists()) {}
     }
 
     /**
@@ -66,7 +76,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken($this->guard()->refresh());
+        return $this->respondWithToken(auth()->refresh());
     }
 
     /**
@@ -80,18 +90,8 @@ class AuthController extends Controller
     {
         return response()->json([
             'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => $this->guard()->factory()->getTTL() * 60,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
         ]);
-    }
-
-    /**
-     * Get the guard to be used during authentication.
-     *
-     * @return \Illuminate\Contracts\Auth\Guard
-     */
-    public function guard()
-    {
-        return Auth::guard('api');
     }
 }

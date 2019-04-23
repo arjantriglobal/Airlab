@@ -1,7 +1,7 @@
 /application/node_modules
 /hot
 /storage
-/storage/*.key
+/application/storage/*.key
 /application/vendor
 /.idea
 /.vscode
@@ -10,3 +10,4 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/application/.env

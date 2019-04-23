@@ -20,40 +20,46 @@
 .checkbox input:checked + .warning:after{border-color:#FFC107}
 .checkbox input:checked + .danger:after{border-color:#f44336}
 
-#gate {
-  cursor: pointer;
-/*  margin-bottom: 100px;
-*//*  width: 83px;
-  height: 46px;*/
-}
-
-#ball {
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-}
-
 .btn-circle {
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    text-align: center;
-    color: black;
-    font-size: 10px;
+  width: 15px;
+  height: 25px;
+  border-radius: 100%;
+  text-align: center;
+  background-color: white;
+  border-color: #212529;
+}
+
+.shadow-secondary{
+  box-shadow: 0px 1px 25px 15px #6a757e;
+}
+
+.shadow-success{
+  box-shadow: 0px 1px 25px 15px #28a745;
+}
+
+.shadow-warning{
+  box-shadow: 0px 1px 25px 15px #ffc107;
+}
+
+.shadow-danger{
+  box-shadow: 0px 1px 25px 15px #ef143e;
 }
 
 .btn-dev {
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 5px;
-    background-color: black;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  color: purple;
 }
-  #drip {
-    width: 200px;
-    height: 100px;
-    background: blueviolet;
-    margin-bottom: 10px;
-    padding: 10px;
-  }
+.color-red{
+  color: red;
+}
+.color-orange{
+  color: orange;
+}
+.color-green{
+  color: green;
+}
+.blockquote-footer:before {
+  content: "";
+}
