@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use App\Organization;
 
 class OrganizationsTableSeeder extends Seeder
 {
@@ -12,39 +13,12 @@ class OrganizationsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('organizations')->insert([
-            'name' => "Microsoft NL",
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ]);
-
-        DB::table('organizations')->insert([
-            'name' => "Da Vinci College",
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ]);
-
-        DB::table('organizations')->insert([
-            'name' => "Google NL",
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ]);
-
-        DB::table('organizations')->insert([
-            'name' => "KPN",
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ]);
-
-        DB::table('organizations')->insert([
-            'name' => "Da Vinci College",
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ]);
-
-        DB::table('organizations')->insert([
-            'name' => "KFC Amsterdam 54",
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ]);
-
-        DB::table('organizations')->insert([
-            'name' => "KFC Amsterdam 33",
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ]);
+        $organizations = Organization::where("name", "=", "Da Vinci College")->get();
+        if(count($organizations) == 0){
+            $organization = new Organization();
+            $organization->name = "Da Vinci College";
+            $organization->created_at = Carbon::now()->format('Y-m-d H:i:s');
+            $organization->save();
+        }
     }
 }
