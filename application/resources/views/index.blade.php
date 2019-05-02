@@ -317,7 +317,7 @@
         <div class="row">
             <h1 class="col-8" data-bind="text: blueprintName"></h1>
             <div class="col-2">
-            	<a class="nav-link" href="{{ url('api/blueprint/full/') }}" target="_blank"><button class="btn btn-info btn-md" type = 'button'>Fullscreen</button></a>
+            	<a class="nav-link" href="{{ url('api/blueprint/fullscreen') }}" target="_blank"><button class="btn btn-info btn-md" type = 'button'>Fullscreen</button></a>
             </div> 
             <div class="col-2">
                 <div data-bind="if: showUnlocked">

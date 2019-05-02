@@ -46,7 +46,7 @@ Route::group([
 
     // Routes for Airlab Blueprints
     Route::get('blueprint/get', 'BlueprintController@getBlueprint');
-    Route::get('blueprint/fullscreen/get', 'BlueprintController@getBlueprintFullscreen');
+    Route::get('blueprint/fullscreen', 'BlueprintController@getBlueprintFullscreen');
     Route::get('blueprint/devices/get', 'BlueprintController@getUserDevices');
     Route::get('blueprint/db/devices/get', 'BlueprintController@getUserDBDevices');
     Route::post('blueprint/upload', 'BlueprintController@uploadBlueprint');
