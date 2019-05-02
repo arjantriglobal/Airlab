@@ -36,7 +36,7 @@ Route::group([
     // Routes for Airlab Users
     Route::get('airlab/user/organization/get', 'UserController@getUserOrganization');
     Route::post('airlab/profile/edit', 'UserController@editProfile');
-    Route::post('user/info/get', 'UserController@getUserInfo');
+    Route::post('user/info', 'UserController@getUserInfo');
 
     // Routes for Airlab Auths
     Route::post('refresh', 'AuthController@refresh');
