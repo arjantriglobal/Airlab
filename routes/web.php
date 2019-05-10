@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use App\Adapters;
+use App\Adapters\uHooAdapter;
 
 Route::get('/', function () {
   	return view('index');
@@ -23,8 +23,3 @@ Route::get("/getdevices", function () {
 Route::get("/info", function () {
 	phpinfo();
 });
-
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

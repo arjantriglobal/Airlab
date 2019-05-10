@@ -20,7 +20,7 @@ class uHooAdapter
     private static function makeRequest($method, $data = []){
         //Prepare variables
         $username = env("UHOO_USERNAME") !== null ? env("UHOO_USERNAME") : "uhoo@theinnoventors.eu";
-        $password = env("UHOO_PASSWORD") !== null ? makePassword(env("UHOO_PASSWORD")) : "3e24510760d65ee46ba631e4d2d2d04bb1f86fecf56ee2e1248dc59b6749be6e";
+        $password = env("UHOO_PASSWORD") !== null ? self::makePassword(env("UHOO_PASSWORD")) : "3e24510760d65ee46ba631e4d2d2d04bb1f86fecf56ee2e1248dc59b6749be6e";
         
         //Fill username and password
         $data["username"] = $username;
@@ -44,25 +44,25 @@ class uHooAdapter
 
     public static function GetDevices()
     {
-       return makeRequest("getdevicelist");
+       return self::makeRequest("getdevicelist", null);
     }
 
     public static function GetLatestData($serialNumber)
     {
         $data = [ "serialNumber" => $serialNumber ];
-        return makeRequest("getlatestdata", $data);
+        return self::makeRequest("getlatestdata", $data);
     }
 
     public static function GetHourlyData($serialNumber, $prevDateTime = null){
         $data = [ "serialNumber" => $serialNumber ];
         if($prevDateTime !== null) $data["prevDateTime"] = $prevDateTime;
-        return makeRequest("gethourlydata", $data);
+        return self::makeRequest("gethourlydata", $data);
     }
 
     public static function GetDailyData($serialNumber, $prevDateTime = null){
         $data = [ "serialNumber" => $serialNumber ];
         if($prevDateTime !== null) $data["prevDateTime"] = $prevDateTime;
-        return makeRequest("getdailydata", $data);
+        return self::makeRequest("getdailydata", $data);
     }
 
 }
