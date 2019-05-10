@@ -36,7 +36,7 @@ Route::group([
     // Routes for Airlab Users
     Route::get('airlab/user/organization/get', 'UserController@getUserOrganization');
     Route::post('airlab/profile/edit', 'UserController@editProfile');
-    Route::post('user/info/get', 'UserController@getUserInfo');
+    Route::post('user/info', 'UserController@getUserInfo');
 
     // Routes for Airlab Auths
     Route::post('refresh', 'AuthController@refresh');
@@ -46,7 +46,7 @@ Route::group([
 
     // Routes for Airlab Blueprints
     Route::get('blueprint/get', 'BlueprintController@getBlueprint');
-    Route::get('blueprint/fullscreen/get', 'BlueprintController@getBlueprintFullscreen');
+    Route::get('blueprint/fullscreen', 'BlueprintController@getBlueprintFullscreen');
     Route::get('blueprint/devices/get', 'BlueprintController@getUserDevices');
     Route::get('blueprint/db/devices/get', 'BlueprintController@getUserDBDevices');
     Route::post('blueprint/upload', 'BlueprintController@uploadBlueprint');
