@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use User;
 use App\Organization;
 
-class AuthController extends Controller
+class AuthController2 extends Controller
 {
     /**
      * Create a new AuthController instance.
