@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Device;
-use App\Blueprint;
+use App\Models\Device;
+use App\Models\Blueprint;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
