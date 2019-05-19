@@ -52,11 +52,8 @@
         </div>
     </nav>
     <main>
-        <div class="p-2">
+        <div class="{{ !empty($nopadding) && $nopadding ? "" : "p-2"}}">
             @yield('content')
-        </div>
-        <div>
-            @yield('full-content')
         </div>
     </main>
     <footer>
