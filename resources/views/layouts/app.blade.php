@@ -15,69 +15,78 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/layout.css') }}" rel="stylesheet">
     
     @yield('head')
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
+<body class="collapsed">
+    <nav>
+        <span onclick="collapse();" class="nav-button"><i class="fas fa-bars"></i></span>
+        <div class="nav-items">
+            <a href="/"><span>Dashboard</span><i class="fas fa-home"></i></a>
+            <a href="/"><span>Profiel</span><i class="fas fa-user-alt"></i></a>
+            <a href="/"><span>Apparaten</span><i class="fas fa-laptop"></i></a>
+            <a href="/"><span>Uitloggen</span><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </nav>
+    <header>
+        <div class="header-buttons">
+            <a href="#"><i class="fas fa-arrow-left"></i></a>
+            <a href="/"><i class="fas fa-home"></i></a>
+        </div>
+        <div class="header-title">{{ config('app.name', 'Laravel') }}</div>
+        <div class="header-buttons">
+            @guest
+                <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt"></i></a>
+            @else
+                <a href="/profile"><i class="fas fa-user-alt"></i></a>
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i></a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            @endguest 
+        </div>
+    </header>
+    <div id="content" onscroll="OnScroll(this);">
+        <main>
+            <div>@yield('content')</div>
         </main>
+        <footer>
+            <span class="copyright">&#169;Airlab 2019</span>
+        </footer>
     </div>
+    <script type="text/javascript">
+
+        /* this code block is for the header of the page */
+        var OnScrollTimeout = null;
+        function OnScroll(el){
+            if(OnScrollTimeout !== null) clearTimeout(OnScrollTimeout);
+            OnScrollTimeout = setTimeout(function(){
+                var scrollPosition = Math.round(el.scrollTop);
+                if (scrollPosition > 50){ 
+                    document.querySelector('body').classList.add('scrolled');
+                }
+                else {
+                    document.querySelector('body').classList.remove('scrolled');
+                }
+            }, 100);
+        }
+        /* ---------------------------------------------- */
+
+        function collapse(){
+            var body = document.querySelector("body");
+            if(body.classList.contains("collapsed")){
+                body.classList.remove("collapsed");
+            }else{
+                body.classList.add("collapsed");
+            }
+        }
+
+    </script>
     @yield('script')
 </body>
 </html>
