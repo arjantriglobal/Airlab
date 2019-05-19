@@ -48,18 +48,13 @@
                         </a>
 
                         <div id="register_user_div">
-                            test
-                        </div>
+                            <form method="post" action="{{url('/profile/adduser')}}">
+                                @csrf
 
-                        <div id="upload_blueprint_div" style="display:none;">
-                            test
-                        </div>
-
-                        <div id="user_info_div" style="display:none;">
-                            <form>
                                 <div class="form-group">
                                     <label class="col-form-label">Organization</label>
-                                    <select class="form-control m-bot15" name="role_id">
+                                    <select class="form-control m-bot15" name="organization_id">
+                                        <option value=""></option>
                                         @foreach($organizations as $id => $name)
                                             <option value="{{$id}}">{{$name}}</option>
                                         @endforeach
@@ -67,12 +62,11 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-form-label">Users</label>
+                                    <label class="col-form-label">Role</label>
 
-                                    <select id="userSelect" class="form-control m-bot15" name="name">
-                                        @foreach($users as $user)
-                                            <option value="{{$user->id}}">{{$user->name}}</option>
-                                        @endforeach
+                                    <select class="form-control m-bot15" name="role_id">
+                                        <option value="1">User</option>
+                                        <option value="2">Admin</option>
                                     </select>
                                 </div>
 
@@ -93,7 +87,94 @@
 
                                 <div class="row">
                                     <div class="col-2 offset-9">
+                                        <button type="submit" class="btn btn-success">Register</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
 
+                        <div id="upload_blueprint_div" style="display:none;">
+                            <form method="post" action="{{url('/profile/uploadblueprint')}}">
+                                @csrf
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Organization</label>
+                                    <select class="form-control m-bot15" name="organization_id">
+                                        <option value=""></option>
+                                        @foreach($organizations as $id => $name)
+                                            <option value="{{$id}}">{{$name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Name</label>
+                                    <input class="form-control m-bot15" type="text" name="name"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">File</label>
+                                    <input class="form-control-file m-bot15" type="file" name="file"/>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-2 offset-5">
+                                        <button type="submit" class="btn btn-success">Upload</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="user_info_div" style="display:none;">
+                            <form method="post" action="{{url('/profile/change')}}">
+                                @csrf
+                                <div class="form-group">
+                                    <label class="col-form-label">Users</label>
+
+                                    <select class="form-control m-bot15" name="user_id">
+                                        @foreach($users as $user)
+                                            <option value="{{$user->id}}">{{$user->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Organization</label>
+                                    <select class="form-control m-bot15" name="organization_id">
+                                        <option value=""></option>
+                                        @foreach($organizations as $id => $name)
+                                            <option value="{{$id}}">{{$name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Role</label>
+
+                                    <select class="form-control m-bot15" name="role_id">
+                                        <option value=""></option>
+                                        <option value="1">User</option>
+                                        <option value="2">Admin</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Name</label>
+                                    <input class="form-control m-bot15" type="text" name="name"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Password</label>
+                                    <input class="form-control m-bot15" type="password" name="password"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Email</label>
+                                    <input class="form-control m-bot15" type="email" name="email"/>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-2 offset-9">
                                         <button type="submit" class="btn btn-success">Change</button>
                                     </div>
                                 </div>
