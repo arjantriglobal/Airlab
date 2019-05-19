@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Device;
 use App\Models\Blueprint;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Organization;
 
 class HomeController extends Controller
 {
@@ -30,30 +31,34 @@ class HomeController extends Controller
         $role = $user->role;
         $organizationid = $user->organization_id;
 
-        //If admin
         if($role == 2){
-            $devices = Device::where([
-                ["organization_id", "!=", null],
-                ["blueprint_id", "!=", null]
-            ])->get();
-    
-            $blueprints = Blueprint::where([
-                ["organization_id", "!=", null]
-            ])->get();
+            $organizations = Organization::all();
         }else{
-            $devices = Device::where([
-                ["organization_id", "=", $organizationid],
-                ["blueprint_id", "!=", null]
-            ])->get();
-    
+            $organizations = Organization::where(["organization_id", "=", $organizationid])->get();
+        }
+
+        $organizationBlueprints = [];
+        $blueprintMapper = (Object)[];
+        $blueprintDevices = (Object)[];
+        foreach($organizations as $organization){
             $blueprints = Blueprint::where([
-                ["organization_id", "!=", $organizationid]
+                ["organization_id", "=", $organization->id]
             ])->get();
+            $organizationBlueprints[$organization->id] = $blueprints;
+            foreach($blueprints as $blueprint){
+                $blueprintMapper->{$blueprint->id} = $blueprint;
+                $blueprintDevices->{$blueprint->id} = Device::where([
+                    ["organization_id", "=", $organization->id],
+                    ["blueprint_id", "=", $blueprint->id]
+                ])->get();
+            }
         }
    
         return view('home', [
-            "devices" => $devices, 
-            "blueprints" => $blueprints
+            "organizations" => $organizations,
+            "organizationBlueprints" => $organizationBlueprints,
+            "blueprintDevices" => $blueprintDevices,
+            "blueprints" => $blueprintMapper
         ]);
     }
 }

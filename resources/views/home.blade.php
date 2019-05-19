@@ -1,7 +1,45 @@
-@extends('layouts.app', ["nopadding" => false])
+@extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-2">
+                <div id="accordion">
+                    @foreach ($organizations as $organization)
+                        <div class="bg-white">
+                            <div class="btn d-block border-radius-0 text-white bg-primary p-2" data-toggle="collapse" data-target="#organization{{$organization->id}}">{{ $organization->name }}</div>         
+                            <div id="organization{{$organization->id}}" class="collapse show" data-parent="#accordion">
+                                @foreach ($organizationBlueprints[$organization->id] as $blueprint)
+                                    <div class="btn btn-secondary btn-block" onclick="toggleBlueprint({{$blueprint->id}});" value={{$blueprint->id}}>{{ $blueprint->name }}</div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="col-8">
+                <div id="blueprint">
+                    <canvas></canvas>
+                    <div class="devices"></div>
+                </div>
+            </div>
+            <div class="col-2">
+                @foreach ($blueprintDevices as $blueprintid => $devices)
+                    <div id="blueprint{{ $blueprintid }}">
+                        @if(count($devices) > 0 )
+                            @foreach ($devices as $device)
+                                <div class="btn btn-block btn-primary">{{$device->name}}</div>
+                            @endforeach
+                        @else
+                            <p>Geen devices beschikbaar</p>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-5">
         <div class="row justify-content-center">
             <div class="row">
                 <div class="col-md-4">
@@ -13,9 +51,7 @@
                 <div class="col-md-3" >
                     <div class="form-group">
                         <select class="form-control">
-                            @foreach ($blueprints as $blueprint)
-                                <option value={{$blueprint->id}}>{{ $blueprint->name }}</option>
-                            @endforeach
+
                         </select>
                     </div>
                 </div>
@@ -48,9 +84,7 @@
                 </div>
             </div>
 
-            <div id="bp" style="border:2px solid black; background-color: white;">
-                <canvas class="droppable" id="currentBP" width="1000" height="500"></canvas>  
-            </div>
+
 
             <div class="modal fade" tabindex="-1" role="dialog" id="removeDevice">
                 <div class="modal-dialog">
@@ -140,4 +174,53 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        var blueprints = {!! json_encode($blueprints) !!};
+        var blueprintDevices = {!! json_encode($blueprintDevices) !!};
+
+        function toggleBlueprint(blueprintid){
+            var blueprint = blueprints[blueprintid];
+            var devices = blueprintDevices[blueprintid];
+            var blueprintContainer = document.getElementById('blueprint');
+            var deviceContainer = blueprintContainer.querySelector(".devices");
+            deviceContainer.innerHTML = "";
+            var canvas = blueprintContainer.querySelector("canvas");
+            var context = canvas.getContext("2d");
+            var imageUrl = "{{env('APP_URL') }}/" + blueprints[blueprintid].path;
+            var img = document.createElement("img");
+            img.src = imageUrl;
+            img.onload = function(){
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                var ratio = (context.width / context.height);
+                canvas.style.height = (canvas.clientWidth * ratio);
+                context.drawImage(img, 0,0);
+                for(var deviceid in devices){
+                    var device = devices[deviceid];
+                    var el = document.createElement("div");
+                    el.id="device"+deviceid;
+                    el.style.top = device.top_pixel + "px";
+                    el.style.left = device.left_pixel + "px";
+                    el.style.backgroundColor = "red";
+                    el.setAttribute("data-id", device.id);
+                    el.classList.add("device");
+                    deviceContainer.appendChild(el);
+                    $("#" + el.id).popover({
+                        placement: 'top',
+                        animation: true,
+                        trigger: 'hover',
+                        title: "Sensor",
+                        content: device.name
+                    });
+                }
+            }
+        }
+
+        function loadDevices(){
+
+        }
+    </script>
+@endsection
+@section('scripts')
+
 @endsection
