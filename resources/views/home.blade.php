@@ -201,7 +201,6 @@
                     el.id="device"+deviceid;
                     el.style.top = device.top_pixel + "px";
                     el.style.left = device.left_pixel + "px";
-                    el.style.backgroundColor = "red";
                     el.setAttribute("data-id", device.id);
                     el.classList.add("device");
                     deviceContainer.appendChild(el);
@@ -209,8 +208,8 @@
                         placement: 'top',
                         animation: true,
                         trigger: 'hover',
-                        title: "Sensor",
-                        content: device.name
+                        title: device.name,
+                        content: ""
                     });
                 }
             }
