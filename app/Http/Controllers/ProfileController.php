@@ -99,7 +99,7 @@ class ProfileController extends Controller
             $fileNameToStore = $filename.'.'.$extension;
 
             // Store the file
-            $path = $request->file('uploaded_file')->storeAs('public/', $fileNameToStore);
+            $path = $request->file('uploaded_file')->storeAs('storage/', $fileNameToStore);
         }
 
         // Create a User using User model
