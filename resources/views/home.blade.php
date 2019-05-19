@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.app', ["nopadding" => false])
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="row">
                 <div class="col-md-4">
@@ -139,6 +139,5 @@
                 </div>
             </div>
         </div>
-
-</div>
+    </div>
 @endsection
