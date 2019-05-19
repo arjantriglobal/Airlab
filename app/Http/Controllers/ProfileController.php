@@ -8,24 +8,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Organization;
-use App\User;
+use App\Models\Organization;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
     public function index()
     {
-        $profiles = User::all();
+        $organizations_list = [];
 
-        $organizations = Organization::all();
-        dd($organizations);
+        foreach (Organization::all() as $organization)
+        {
+            $organizations_list[$organization->id] = $organization->name;
+        }
+
         $user = Auth::user();
+
         return view('profile.index',
         [
             'user' => $user,
-            'profiles' => $profiles,
-            'organizations' => $organizations
+            'users' => User::all(),
+            'organizations' => $organizations_list
         ]);
     }
 }
