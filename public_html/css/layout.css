@@ -41,6 +41,7 @@ nav > .nav-button{
     cursor: pointer;
     transition: 300ms ease-in-out height;
 }
+
 nav > .nav-items{
     position: absolute;
     top: 20%;
@@ -63,6 +64,7 @@ nav > .nav-items > a{
 }
 nav > .nav-items > a:hover{
     text-decoration: none;
+    background-color: var(--color1);
 }
 nav > .nav-items > a i{
     width: 50px;
@@ -121,35 +123,36 @@ body.collapsed header{
 body.scrolled header > .header-buttons > a{
     font-size: 18pt;
 }
-body.collapsed div#content{ 
-    padding-left: var(--menu-collapsed-width); 
 
-
+body.collapsed main{
+    left: var(--menu-collapsed-width);
 }
-div#content{
+main{
     overflow: auto;
     background-color: var(--color2);
     position: absolute;
-    top: var(--header-scrolled-height);
-    left: 0;
+    top: var(--header-height);
+    left: var(--menu-width);
     right: 0px;
-    bottom: 0px;
-    padding-left: var(--menu-width);
-    transition: 500ms ease-in-out padding-left;
-}
-div#content > main{
-    position: relative;
-    margin-top: 24px;
-    padding: 1em;
+    bottom: 50px;
+    transition: 500ms ease-in-out left;
 }
 
+
 footer{
-    position: relative;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     background-color: var(--color1);
-    text-align: right;
+    z-index: 999;
 }
+
 footer > .copyright{
-    display: block;
+    margin-right: 12px;
     color: #FFFFFF;
-    padding: 15px;
 }

@@ -23,16 +23,7 @@
     
     @yield('head')
 </head>
-<body class="collapsed">
-    <nav>
-        <span onclick="collapse();" class="nav-button"><i class="fas fa-bars"></i></span>
-        <div class="nav-items">
-            <a href="/"><span>Dashboard</span><i class="fas fa-home"></i></a>
-            <a href="/"><span>Profiel</span><i class="fas fa-user-alt"></i></a>
-            <a href="/"><span>Apparaten</span><i class="fas fa-laptop"></i></a>
-            <a href="/"><span>Uitloggen</span><i class="fas fa-sign-out-alt"></i></a>
-        </div>
-    </nav>
+<body class="collapsed" onscroll="OnScroll(this);">
     <header>
         <div class="header-buttons">
             <a href="#"><i class="fas fa-arrow-left"></i></a>
@@ -51,14 +42,26 @@
             @endguest 
         </div>
     </header>
-    <div id="content" onscroll="OnScroll(this);">
-        <main>
-            <div>@yield('content')</div>
-        </main>
-        <footer>
-            <span class="copyright">&#169;Airlab 2019</span>
-        </footer>
-    </div>
+    <nav>
+        <span onclick="collapse();" class="nav-button "><i class="fas fa-bars"></i></span>
+        <div class="nav-items">
+            <a href="/"><span>Dashboard</span><i class="fas fa-home"></i></a>
+            <a href="/"><span>Profiel</span><i class="fas fa-user-alt"></i></a>
+            <a href="/"><span>Apparaten</span><i class="fas fa-laptop"></i></a>
+            <a href="/"><span>Uitloggen</span><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </nav>
+    <main>
+        <div class="p-2">
+            @yield('content')
+        </div>
+        <div>
+            @yield('full-content')
+        </div>
+    </main>
+    <footer>
+        <span class="copyright">&#169;Airlab 2019</span>
+    </footer>
     <script type="text/javascript">
 
         /* this code block is for the header of the page */
