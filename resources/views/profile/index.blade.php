@@ -94,7 +94,7 @@
                         </div>
 
                         <div id="upload_blueprint_div" style="display:none;">
-                            <form method="post" action="{{url('/profile/uploadblueprint')}}">
+                            <form method="post" action="{{url('/profile/uploadblueprint')}}" enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="form-group">
@@ -114,7 +114,7 @@
 
                                 <div class="form-group">
                                     <label class="col-form-label">File</label>
-                                    <input class="form-control-file m-bot15" type="file" name="file"/>
+                                    <input type="file" name="uploaded_file" id="uploaded_file" />
                                 </div>
 
                                 <div class="row">
