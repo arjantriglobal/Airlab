@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Record;
-use App\Device;
+use App\Models\Record;
+use App\Models\Device;
 
 class RecordsTableSeeder extends Seeder
 {
