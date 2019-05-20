@@ -196,24 +196,72 @@
                 canvas.style.height = (canvas.clientWidth * ratio);
                 context.drawImage(img, 0,0);
                 for(var deviceid in devices){
-                    var device = devices[deviceid];
-                    var el = document.createElement("div");
-                    el.id="device"+deviceid;
-                    el.style.top = device.top_pixel + "px";
-                    el.style.left = device.left_pixel + "px";
-                    el.setAttribute("data-id", device.id);
-                    el.classList.add("device");
-                    deviceContainer.appendChild(el);
-                    $("#" + el.id).popover({
-                        placement: 'top',
-                        animation: true,
-                        trigger: 'hover',
-                        title: device.name,
-                        content: ""
-                    });
+                    (function(){
+                        var device = devices[deviceid];
+                        var el = document.createElement("div");
+                        el.id="device"+device.id;
+                        el.style.top = device.top_pixel + "px";
+                        el.style.left = device.left_pixel + "px";
+                        el.setAttribute("data-id", device.id);
+                        getDeviceStatus(device.id, function(data){
+                            console.log(data);
+                            if(data){
+                                var message = data.messages[0], statusclass = "shadow-secondary";
+                                switch(data.value){
+                                    case 1:
+                                        statusclass = "shadow-success";
+                                    break;
+                                    case 2:
+                                        statusclass = "shadow-warning";
+                                    break;
+                                    case 3:
+                                        statusclass = "shadow-danger";
+                                    break;
+                                }
+                                el.classList.add("device", "shadow", statusclass);
+                                deviceContainer.appendChild(el);
+                                    $("#" + el.id).popover({
+                                    placement: 'top',
+                                    animation: true,
+                                    trigger: 'hover',
+                                    title: device.name,
+                                    content: message
+                                });
+                            }
+                        });
+                    })();
                 }
             }
         }
+
+        function getLastRecord(deviceid, cb){
+            var url = "{{ env('APP_URL') }}/api/devices/" + deviceid + "/lastrecord";
+            var xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                cb(xhttp.response);
+            };
+            xhttp.onerror = function(){
+                cb(null);
+            }
+            xhttp.responseType = 'json';
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+
+        function getDeviceStatus(deviceid, cb){
+            var url = "{{ env('APP_URL') }}/api/devices/" + deviceid + "/status";
+            var xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                cb(xhttp.response);
+            };
+            xhttp.onerror = function(){
+                cb(null);
+            }
+            xhttp.responseType = 'json';
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+
 
         function loadDevices(){
 

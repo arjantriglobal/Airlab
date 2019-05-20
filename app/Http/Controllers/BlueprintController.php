@@ -149,56 +149,6 @@ class BlueprintController extends Controller
     }
 
     /**
-     * Method to get devices where left_pixel is not equal to NULL
-     * @return [type] [description]
-     */
-    public function getUserDBDevices()
-    {
-        $user = auth::user();
-        $devices = Device::where([
-            ['organization_id', '=', $user['organization_id']],
-        ])->whereNotNull(
-            'left_pixel'
-        )->get();
-        $warningValues = array();
-
-        foreach ($devices as $key => $device) {
-            $deviceData = Record::where('device_id', $device['id'])->orderByRaw('created_at DESC')->first();
-
-            if(isset($deviceData)){
-                $color = "shadow-success";
-                $textColor = "black";
-                $value = "All values are great!";
-                //Check warning for temperature
-                if($deviceData['temperature'] <= 20 || $deviceData['temperature'] >= 27){
-                    $color = "shadow-warning";
-                    $value = "Temprature is " . round($deviceData['temperature']) . "℃";
-                }
-                //Check danger for temprature
-                if($deviceData['temperature'] <= 10 || $deviceData['temperature'] >= 40){
-                    $color = "shadow-danger";
-                    $value = "Temprature is " . round($deviceData['temperature']) . "℃";
-                    $textColor = "bg-danger";
-                }
-                //Check warning for relative humidity
-                if($deviceData['relative_humidity'] <= 30 || $deviceData['relative_humidity'] >= 50){
-                    $color = "shadow-warning";
-                    $value = "Relative humidity is " . round($deviceData['relative_humidity']) . "%";
-                    $textColor = "bg-warning";
-                }
-            }else{
-                $color = "shadow-secondary";
-                $value = "Device is offline.";
-            }
-           
-            $devices[$key]['danger'] = $value;
-            $devices[$key]['colorClass'] = $color;
-            $devices[$key]['records'] = $deviceData;
-        }
-        return $devices;
-    }
-
-    /**
      * Method to get records of a specific device
      * @param  Request $request [description]
      * @return [type]           [description]

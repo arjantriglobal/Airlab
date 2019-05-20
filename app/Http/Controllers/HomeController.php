@@ -30,28 +30,21 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        $organizationid = $user->organization_id;
 
         if($role == 2){
             $organizations = Organization::all();
         }else{
-            $organizations = Organization::where(["organization_id", "=", $organizationid])->get();
+            $organizations = $user->organizations;
         }
 
         $organizationBlueprints = [];
         $blueprintMapper = (Object)[];
         $blueprintDevices = (Object)[];
         foreach($organizations as $organization){
-            $blueprints = Blueprint::where([
-                ["organization_id", "=", $organization->id]
-            ])->get();
-            $organizationBlueprints[$organization->id] = $blueprints;
-            foreach($blueprints as $blueprint){
+            $organizationBlueprints[$organization->id] = $organization->blueprints;
+            foreach($organizationBlueprints[$organization->id] as $blueprint){
                 $blueprintMapper->{$blueprint->id} = $blueprint;
-                $blueprintDevices->{$blueprint->id} = Device::where([
-                    ["organization_id", "=", $organization->id],
-                    ["blueprint_id", "=", $blueprint->id]
-                ])->get();
+                $blueprintDevices->{$blueprint->id} = $blueprint->devices;
             }
         }
    
