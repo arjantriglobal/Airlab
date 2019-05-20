@@ -7,6 +7,7 @@ use App\Models\Device;
 use App\Models\Blueprint;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Organization;
+use App\Models\User;
 
 class HomeController extends Controller
 {

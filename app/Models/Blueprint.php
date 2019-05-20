@@ -6,5 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Blueprint extends Model
 {
-    protected $table = 'blueprints';
+    public function organization()
+    {
+        return $this->belongsTo('App\Models\Organization');
+    }
+
+    public function devices()
+    {
+    	return $this->hasMany('App\Models\Device');
+    }
 }

@@ -9,33 +9,24 @@ class Device extends Model
 {
   use SoftDeletes;
 
-  /**
-   * The attributes that should be mutated to dates.
-   *
-   * @var array
-   */
   protected $dates = ['deleted_at'];
-  public $organization;
 
-  /**
-   * Device relationship with an organization
-   * @return [type] [description]
-   */
   public function organization()
   {
-    return $this->belongsTo('App\Organization');
+    return $this->belongsTo('App\Models\Organization');
   }
 
-  /**
-   * Device relationship with meters
-   * @return [type] [description]
-   */
+  public function blueprint()
+  {
+    return $this->belongsTo('App\Models\Blueprint');
+  }
+
   public function records()
   {
-    return $this->hasMany('App\Record');
+    return $this->hasMany('App\Models\Record');
   }
 
-  public function getlatestrecord(){
-    return null;
+  public function getLastRecord(){
+    return Record::where("device_id", "=", $this->id)->orderBy("created_at", "DESC")->first();
   }
 }

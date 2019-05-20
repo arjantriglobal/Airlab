@@ -6,15 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
 {
-	// Organization relationship with devices
     public function devices()
     {
-    	return $this->hasMany('App\Device');
+    	return $this->hasMany('App\Models\Device');
     }
 
-    // Organization relationship with users
-    public function user()
+    public function blueprints()
     {
-    	return $this->hasMany('App\User');
+    	return $this->hasMany('App\Models\Blueprint');
+    }
+
+    public function users()
+    {
+    	return $this->hasMany('App\Models\User');
     }
 }
