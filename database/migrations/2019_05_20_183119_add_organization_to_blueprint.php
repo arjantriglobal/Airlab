@@ -17,11 +17,12 @@ class AddOrganizationToBlueprint extends Migration
             $table->integer('organization_id')
             ->unsigned()
             ->nullable(false)
-            ->foreign('organization_id')
+            ->change();
+
+            $table->foreign('organization_id')
             ->references('id')
             ->on('organizations')
-            ->onDelete('cascade')
-            ->change();
+            ->onDelete('cascade');
         });
     }
 

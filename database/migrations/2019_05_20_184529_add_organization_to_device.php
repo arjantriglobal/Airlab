@@ -14,7 +14,11 @@ class AddOrganizationToDevice extends Migration
     public function up()
     {
         Schema::table('devices', function (Blueprint $table) {
-            $table->integer('organization_id')->unsigned()->nullable()->change();
+            $table->integer('organization_id')
+            ->unsigned()
+            ->nullable()
+            ->change();
+            
             $table->foreign('organization_id')
             ->references('id')
             ->on('organizations')

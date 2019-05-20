@@ -14,7 +14,15 @@ class AddDeviceToRecords extends Migration
     public function up()
     {
         Schema::table('records', function (Blueprint $table) {
-            $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade');
+            $table->integer('device_id')
+            ->unsigned()
+            ->nullable(false)
+            ->change();
+            
+            $table->foreign('device_id')
+            ->references('id')
+            ->on('devices')
+            ->onDelete('cascade');
         });
     }
 

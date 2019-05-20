@@ -17,11 +17,12 @@ class AddBlueprintToDevice extends Migration
             $table->integer('blueprint_id')
             ->unsigned()
             ->nullable()
-            ->foreign('blueprint_id')
+            ->change();
+
+            $table->foreign('blueprint_id')
             ->references('id')
             ->on('blueprints')
-            ->onDelete('cascade')
-            ->change();
+            ->onDelete('set null');
         });
     }
 

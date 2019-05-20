@@ -14,8 +14,15 @@ class AddOrganizationToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('organization_id')->unsigned()->nullable(false)->change();
-            $table->foreign('organization_id')->references("id")->on("organizations")->onDelete("cascade");
+            $table->integer('organization_id')
+            ->unsigned()
+            ->nullable(false)
+            ->change();
+            
+            $table->foreign('organization_id')
+            ->references("id")
+            ->on("organizations")
+            ->onDelete("cascade");
         });
     }
 
