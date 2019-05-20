@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        //Commands\uHooScraper::class,
     ];
 
     /**
@@ -24,8 +24,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        /*$schedule->command('uhoo:scraper')
+            ->quarterly();*/
+
+        /*$schedule->command('uhoo:scraper')
+            ->everyMinute();*/
+
+        $schedule->exec("php artisan uhoo:scraper");
     }
 
     /**
