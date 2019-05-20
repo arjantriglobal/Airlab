@@ -1,7 +1,7 @@
 <?php
 
-use App\User;
-use App\Organization;
+use App\Models\User;
+use App\Models\Organization;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 

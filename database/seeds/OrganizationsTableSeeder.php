@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
-use App\Organization;
+use App\Models\Organization;
 
 class OrganizationsTableSeeder extends Seeder
 {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Adapters\uHooAdapter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -98,26 +99,8 @@ class ApiController extends Controller
      */
     public function getUhooDevices()
     {
-        $data = array('username' => 'uhoo@theinnoventors.eu', 'password' => '3e24510760d65ee46ba631e4d2d2d04bb1f86fecf56ee2e1248dc59b6749be6e');
+        $response = uHooAdapter::GetDevices();
 
-        // Receive API by doing an 'POST' request
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, "https://api.uhooinc.com/v1/getdevicelist");
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
-        curl_setopt($curl, CURLOPT_ENCODING, "");
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        curl_exec($curl);
-
-        $result = curl_exec($curl);
-        $response = json_decode($result);
-        
-        //$user = auth::user();
-        //$organization = Organization::where('name', '=', $user['name'])->get();
         $newDevices = [];
         foreach ($response as $deviceResponse) {
             $device = Device::where('name', '=', $deviceResponse->deviceName)->get();
@@ -149,51 +132,26 @@ class ApiController extends Controller
         // Save new records data to DB
         foreach ($devices as $device) {
             if (isset($device->serial_number)) {
-                $data = array(
-                    'username' => 'uhoo@theinnoventors.eu', 
-                    'password' => '3e24510760d65ee46ba631e4d2d2d04bb1f86fecf56ee2e1248dc59b6749be6e', 
-                    'serialNumber' => $device->serial_number
-                );
-                // Receive API by doing an 'POST' request
-                $curl = curl_init();
-                curl_setopt($curl, CURLOPT_URL, "https://api.uhooinc.com/v1/getlatestdata");
-                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
-                curl_setopt($curl, CURLOPT_ENCODING, "");
-                curl_setopt($curl, CURLOPT_TIMEOUT, 60);
-                curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                $result = null;
-                try{
-                    $result = curl_exec($curl);
-                }
-                catch(\Exception $e){
-                    $result = null;
-                }
-                if($result != null){
-                    $response = json_decode($result);
-                    $Timestamp = new \DateTime("@$response->Timestamp");
-                    $r = Record::where('created_at', '=', $Timestamp)
-                        ->where('id', '=', $device->id)
-                        ->get();
-                    if(count($r) < 1){
-                        $record = new Record;
-                        $record->device_id = $device->id;
-                        $record->temperature = $response->Temperature;
-                        $record->relative_humidity = $response->{'Relative Humidity'};
-                        $record->pm2_5 = $response->{'PM2.5'};
-                        $record->tvoc = $response->TVOC;
-                        $record->co2 = $response->CO2;
-                        $record->co = $response->CO;
-                        $record->air_pressure = $response->{'Air Pressure'};
-                        $record->ozone = $response->Ozone;
-                        $record->no2 = $response->NO2;
-                        $record->created_at = $Timestamp;
-                        $record->save();
-                        array_push($records, $record);
-                    }
+                $response = uHooAdapter::GetLatestData($device->serial_number);
+                $Timestamp = new \DateTime("@$response->Timestamp");
+                $r = Record::where('created_at', '=', $Timestamp)
+                    ->where('id', '=', $device->id)
+                    ->get();
+                if(count($r) < 1){
+                    $record = new Record;
+                    $record->device_id = $device->id;
+                    $record->temperature = $response->Temperature;
+                    $record->relative_humidity = $response->{'Relative Humidity'};
+                    $record->pm2_5 = $response->{'PM2.5'};
+                    $record->tvoc = $response->TVOC;
+                    $record->co2 = $response->CO2;
+                    $record->co = $response->CO;
+                    $record->air_pressure = $response->{'Air Pressure'};
+                    $record->ozone = $response->Ozone;
+                    $record->no2 = $response->NO2;
+                    $record->created_at = $Timestamp;
+                    $record->save();
+                    array_push($records, $record);
                 }
             }
         }

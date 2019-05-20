@@ -49,6 +49,7 @@
             <a href="/"><span>Dashboard</span><i class="fas fa-home"></i></a>
             <a href="/profile"><span>Profiel</span><i class="fas fa-user-alt"></i></a>
             <a href="/"><span>Apparaten</span><i class="fas fa-laptop"></i></a>
+            <a href="/organizations"><span>Organizations</span><i class="fas fa-layer-group"></i></a>
             <a href="/"><span>Uitloggen</span><i class="fas fa-sign-out-alt"></i></a>
         </div>
     </nav>
