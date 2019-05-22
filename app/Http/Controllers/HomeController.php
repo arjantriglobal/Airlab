@@ -37,22 +37,13 @@ class HomeController extends Controller
             $organizations = $user->organizations;
         }
 
-        $organizationBlueprints = [];
-        $blueprintMapper = (Object)[];
-        $blueprintDevices = (Object)[];
+        $blueprints = [];
         foreach($organizations as $organization){
-            $organizationBlueprints[$organization->id] = $organization->blueprints;
-            foreach($organizationBlueprints[$organization->id] as $blueprint){
-                $blueprintMapper->{$blueprint->id} = $blueprint;
-                $blueprintDevices->{$blueprint->id} = $blueprint->devices;
+            foreach($organization->blueprints as $blueprint){
+                $blueprints[] = $blueprint;
             }
         }
    
-        return view('home', [
-            "organizations" => $organizations,
-            "organizationBlueprints" => $organizationBlueprints,
-            "blueprintDevices" => $blueprintDevices,
-            "blueprints" => $blueprintMapper
-        ]);
+        return view('home', ["organizations" => $organizations, "blueprints" => $blueprints]);
     }
 }

@@ -4,13 +4,22 @@ Route::group([
     'middleware' => 'api'
 ], function ($router) {
 
+    //Routes for device api controller
     Route::get('devices','Api\DeviceApiController@devices');
     Route::get('devices/{id}', 'Api\DeviceApiController@device');
     Route::get('devices/{id}/lastrecord', 'Api\DeviceApiController@lastrecord');
     Route::get('devices/{id}/status', 'Api\DeviceApiController@status');
 
+    //Routes for blueprint api controller
+    Route::get('blueprints','Api\BlueprintApiController@blueprints');
+    Route::get('blueprints/{id}', 'Api\BlueprintApiController@blueprint');
+    Route::get('blueprints/{id}/devices', 'Api\BlueprintApiController@devices');
 
-
+    /*
+    
+        the below routes are old and need to be refactored
+    
+    */
 
     // Routes for Airlab Blueprints
     Route::get('blueprint/get', 'BlueprintController@getBlueprint');

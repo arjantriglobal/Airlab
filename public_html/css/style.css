@@ -27,18 +27,16 @@
     cursor: pointer;
 }
 
-.shadow{
-    box-shadow: 0px 1px 25px 15px;
+.device.shadow{
+    box-shadow: 0px 1px 25px 15px !important;
 }
-.shadow.shadow-secondary{
+.device.shadow.shadow-secondary{
     color: #6a757e;
 }
-  
-.shadow.shadow-success{
+.device.shadow.shadow-success{
     color: #28a745;
 }
-
-.shadow.shadow-warning{
+.device.shadow.shadow-warning{
     color: #ffc107;
 }
 

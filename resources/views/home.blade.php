@@ -4,37 +4,69 @@
     <div class="container-fluid mt-5">
         <div class="row">
             <div class="col-2">
-                <div id="accordion">
-                    @foreach ($organizations as $organization)
-                        <div class="bg-white">
-                            <div class="btn d-block border-radius-0 text-white bg-primary p-2" data-toggle="collapse" data-target="#organization{{$organization->id}}">{{ $organization->name }}</div>         
-                            <div id="organization{{$organization->id}}" class="collapse show" data-parent="#accordion">
-                                @foreach ($organizationBlueprints[$organization->id] as $blueprint)
-                                    <div class="btn btn-secondary btn-block" onclick="toggleBlueprint({{$blueprint->id}});" value={{$blueprint->id}}>{{ $blueprint->name }}</div>
+                <div class="form-group">
+                    <select class="form-control" onchange="selectOrganization(this);">
+                        <option value="0">Selecteer organizatie</option>
+                        @foreach ($organizations as $organization)
+                            <option value="{{ $organization->id }}">{{ $organization->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="p-2 card">
+                    <div class="d-none" data-organization="-1">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="p-1">Geen plattegrond(en) beschikbaar</span>
+                        </div>
+                    </div>
+                    @foreach ($organizations as $organization) 
+                        @if(count($organization->blueprints) > 0)   
+                            <div class="d-block" data-organization="{{$organization->id}}">
+                                @foreach ($organization->blueprints as $blueprint)
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="p-1">{{ $blueprint->name }}</span>
+                                        <div>
+                                            <button class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
+                                            <button class="p-1 btn btn-link text-danger" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-trash-alt"></i></button>
+                                        </div>
+                                    </div>
                                 @endforeach
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             </div>
             <div class="col-8">
-                <div id="blueprint">
-                    <canvas></canvas>
-                    <div class="devices"></div>
+                <div class="card p-2">
+                    <div id="blueprint">
+                        <canvas></canvas>
+                        <div class="devices"></div>
+                    </div>
                 </div>
             </div>
             <div class="col-2">
-                @foreach ($blueprintDevices as $blueprintid => $devices)
-                    <div id="blueprint{{ $blueprintid }}">
-                        @if(count($devices) > 0 )
-                            @foreach ($devices as $device)
-                                <div class="btn btn-block btn-primary">{{$device->name}}</div>
-                            @endforeach
-                        @else
-                            <p>Geen devices beschikbaar</p>
+                <div class="p-2 card">
+                    <h3 class="p-1">Apparaten</h3>
+                    @foreach ($blueprints as $blueprint)
+                        <div class="d-none" data-blueprint="-1">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="p-1">Geen apparaten beschikbaar</span>
+                            </div>
+                        </div>
+                        @if(count($blueprint->devices) > 0 )
+                            <div class="d-block" data-blueprint="{{$blueprint->id}}">
+                                @foreach($blueprint->devices as $device)
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="p-1">{{ $device->name }}</span>
+                                        <div>
+                                            <button class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
+                                            <button class="p-1 btn btn-link text-danger" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-trash-alt"></i></button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         @endif
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
@@ -176,17 +208,74 @@
     </div>
     <script type="text/javascript">
         var blueprints = {!! json_encode($blueprints) !!};
-        var blueprintDevices = {!! json_encode($blueprintDevices) !!};
+        var selected_blueprint = null;
+
+        function selectOrganization(select){
+            var organizations = document.querySelectorAll("[data-organization]");
+            organizations.forEach(function(organization){
+                if(select.value === "0"){
+                    if(organization.getAttribute("data-organization") === "-1"){
+                        organization.classList.add("d-none");
+                        organization.classList.remove("d-block");
+                    }else{
+                        organization.classList.remove("d-none");
+                        organization.classList.add("d-block");
+                    }
+                }
+                else{
+                    organization.classList.remove("d-block");
+                    organization.classList.add("d-none");
+                    if(organization.getAttribute("data-organization") === select.value){
+                        organization.classList.add("d-block");
+                    }
+                }
+            });
+            if(document.querySelectorAll(".d-block[data-organization]").length < 1){
+                var el = document.querySelector("[data-organization='-1']");
+                el.classList.add("d-block");
+                el.classList.remove("d-none");
+            }
+        }
+
+        function selectBlueprint(blueprintid){
+            console.log(blueprintid);
+            var blueprints = document.querySelectorAll("[data-blueprint]");
+            blueprints.forEach(function(blueprint){
+                if(blueprintid === "0"){
+                    if(blueprint.getAttribute("data-blueprint") === "-1"){
+                        blueprint.classList.add("d-none");
+                        blueprint.classList.remove("d-block");
+                    }else{
+                        blueprint.classList.remove("d-none");
+                        blueprint.classList.add("d-block");
+                    }
+                }
+                else{
+                    blueprint.classList.remove("d-block");
+                    blueprint.classList.add("d-none");
+                    if(blueprint.getAttribute("data-blueprint") === blueprintid){
+                        blueprint.classList.add("d-block");
+                    }
+                }
+            });
+            if(document.querySelectorAll(".d-block[data-blueprint]").length < 1){
+                var el = document.querySelector("[data-blueprint='-1']");
+                el.classList.add("d-block");
+                el.classList.remove("d-none");
+            }
+        }
 
         function toggleBlueprint(blueprintid){
-            var blueprint = blueprints[blueprintid];
-            var devices = blueprintDevices[blueprintid];
+            selectBlueprint(blueprintid+"");
+            selected_blueprint = blueprints.find(function(blueprint){
+                return blueprint.id === blueprintid;
+            })
             var blueprintContainer = document.getElementById('blueprint');
             var deviceContainer = blueprintContainer.querySelector(".devices");
             deviceContainer.innerHTML = "";
             var canvas = blueprintContainer.querySelector("canvas");
             var context = canvas.getContext("2d");
-            var imageUrl = "{{env('APP_URL') }}/" + blueprints[blueprintid].path;
+            var imageUrl = "{{env('APP_URL') }}/" + selected_blueprint.path;
             var img = document.createElement("img");
             img.src = imageUrl;
             img.onload = function(){
@@ -195,61 +284,61 @@
                 var ratio = (context.width / context.height);
                 canvas.style.height = (canvas.clientWidth * ratio);
                 context.drawImage(img, 0,0);
-                for(var deviceid in devices){
-                    (function(){
-                        var device = devices[deviceid];
-                        var el = document.createElement("div");
-                        el.id="device"+device.id;
-                        el.style.top = device.top_pixel + "px";
-                        el.style.left = device.left_pixel + "px";
-                        el.setAttribute("data-id", device.id);
-                        getDeviceStatus(device.id, function(data){
-                            console.log(data);
-                            if(data){
-                                var message = data.messages[0], statusclass = "shadow-secondary";
-                                switch(data.value){
-                                    case 1:
-                                        statusclass = "shadow-success";
-                                    break;
-                                    case 2:
-                                        statusclass = "shadow-warning";
-                                    break;
-                                    case 3:
-                                        statusclass = "shadow-danger";
-                                    break;
-                                }
-                                el.classList.add("device", "shadow", statusclass);
-                                deviceContainer.appendChild(el);
-                                    $("#" + el.id).popover({
-                                    placement: 'top',
-                                    animation: true,
-                                    trigger: 'hover',
-                                    title: device.name,
-                                    content: message
+                getBlueprintDevices(selected_blueprint.id, function(devices){
+                    if(devices){
+                        devices.forEach(function(device) {
+                            (function(){
+                                var el = document.createElement("div");
+                                el.id="device"+device.id;
+                                el.style.top = device.top_pixel + "px";
+                                el.style.left = device.left_pixel + "px";
+                                el.setAttribute("data-id", device.id);
+                                getDeviceStatus(device.id, function(data){
+                                    if(data){
+                                        var message = data.messages[0], statusclass = "shadow-secondary";
+                                        switch(data.value){
+                                            case 1:
+                                                statusclass = "shadow-success";
+                                            break;
+                                            case 2:
+                                                statusclass = "shadow-warning";
+                                            break;
+                                            case 3:
+                                                statusclass = "shadow-danger";
+                                            break;
+                                        }
+                                        el.classList.add("device", "shadow", statusclass);
+                                        deviceContainer.appendChild(el);
+                                            $("#" + el.id).popover({
+                                            placement: 'top',
+                                            animation: true,
+                                            trigger: 'hover',
+                                            title: device.name,
+                                            content: message
+                                        });
+                                    }
                                 });
-                            }
+                            })();
                         });
-                    })();
-                }
+                    }
+                });
             }
         }
 
         function getLastRecord(deviceid, cb){
-            var url = "{{ env('APP_URL') }}/api/devices/" + deviceid + "/lastrecord";
-            var xhttp = new XMLHttpRequest();
-            xhttp.onload = function() {
-                cb(xhttp.response);
-            };
-            xhttp.onerror = function(){
-                cb(null);
-            }
-            xhttp.responseType = 'json';
-            xhttp.open("GET", url, true);
-            xhttp.send();
+            getRequest("/api/devices/" + deviceid + "/lastrecord", cb);
         }
 
         function getDeviceStatus(deviceid, cb){
-            var url = "{{ env('APP_URL') }}/api/devices/" + deviceid + "/status";
+            getRequest("/api/devices/" + deviceid + "/status", cb);
+        }
+
+        function getBlueprintDevices(blueprintid, cb){
+            getRequest("/api/blueprints/" + blueprintid + "/devices", cb);
+        }
+
+        function getRequest(url, cb){
+            var url = "{{ env('APP_URL') }}"+ url;
             var xhttp = new XMLHttpRequest();
             xhttp.onload = function() {
                 cb(xhttp.response);
@@ -260,11 +349,6 @@
             xhttp.responseType = 'json';
             xhttp.open("GET", url, true);
             xhttp.send();
-        }
-
-
-        function loadDevices(){
-
         }
     </script>
 @endsection
