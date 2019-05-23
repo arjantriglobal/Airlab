@@ -107,7 +107,7 @@ class ProfileController extends Controller
 
         $blueprint->name = $request->name;
         $blueprint->organization_id = $request->organization_id;
-        $blueprint->path = str_replace("//", "/", $path);
+        $blueprint->path = str_replace("//", "/", "/storage/".$fileNameToStore);
         $blueprint->created_at = date("Y-m-d H:i:s");
         $blueprint->updated_at = date("Y-m-d H:i:s");
 
