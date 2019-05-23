@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Blueprint;
-use App\Record;
-use App\Device;
+use App\Models\Blueprint;
+use App\Models\Record;
+use App\Models\Device;
 use App\Http\Controllers\AuthController;
 
 class BlueprintController extends Controller
@@ -245,5 +246,127 @@ class BlueprintController extends Controller
         $device->left_pixel = NULL;
         $device->top_pixel = NULL;
         $device->save(); 
+    }
+
+    public function index()
+    {
+        $user = Auth::user();
+
+        return view('blueprint.index',
+            [
+                'user' => $user,
+                'blueprints' => Blueprint::all()
+            ]);
+    }
+
+    public function create()
+    {
+        $user = Auth::user();
+
+        return view('blueprint.create',
+            [
+                'user' => $user,
+                'organizations' => Organization::all()
+            ]);
+    }
+
+    public function store(Request $request)
+    {
+        // Handle File Upload
+        if($request->hasFile('uploaded_file')) {
+            // Get filename with extension
+            $filenameWithExt = $request->file('uploaded_file')->getClientOriginalName();
+
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+
+            // Get just ext
+            $extension = $request->file('uploaded_file')->getClientOriginalExtension();
+
+            //Filename to store
+            $fileNameToStore = $filename.'.'.$extension;
+
+            // Store the file
+            $path = $request->file('uploaded_file')->storeAs('public/', $fileNameToStore);
+        }
+
+        // Create a User using User model
+        $blueprint = new Blueprint();
+
+        $blueprint->name = $request->name;
+        $blueprint->organization_id = $request->organization_id;
+        $blueprint->path = str_replace("//", "/", "storage/".$fileNameToStore);
+        $blueprint->created_at = date("Y-m-d H:i:s");
+        $blueprint->updated_at = date("Y-m-d H:i:s");
+
+        $blueprint->save();
+
+        return redirect('/blueprints');
+    }
+
+    public function edit($blueprint_id)
+    {
+        $user = Auth::user();
+
+        $blueprint = Blueprint::findOrFail($blueprint_id);
+
+        return view('blueprint.edit',
+            [
+                'user' => $user,
+                'blueprint' => $blueprint,
+                'organizations' => Organization::all()
+            ]);
+    }
+
+    public function update(Request $request, $blueprint_id)
+    {
+        $blueprint = Blueprint::findOrFail($blueprint_id);
+
+        /*$file_path = public_path().'/'.$blueprint->path;
+        unlink($file_path);*/
+
+        // Handle File Upload
+        if($request->hasFile('uploaded_file')) {
+            // Get filename with extension
+            $filenameWithExt = $request->file('uploaded_file')->getClientOriginalName();
+
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+
+            // Get just ext
+            $extension = $request->file('uploaded_file')->getClientOriginalExtension();
+
+            //Filename to store
+            $fileNameToStore = $filename.'.'.$extension;
+
+            // Store the file
+            $path = $request->file('uploaded_file')->storeAs('public/', $fileNameToStore);
+
+            $file_path = public_path().'/'.$blueprint->path;
+            unlink($file_path);
+        }
+
+        $blueprint->organization_id = $request->organization_id;
+        $blueprint->name = $request->name;
+        $blueprint->path = str_replace("//", "/", "storage/".$fileNameToStore);
+
+        $blueprint->save();
+
+        return redirect('/blueprints');
+    }
+
+    public function delete($blueprint_id)
+    {
+        //Get the right blueprint
+        $blueprint = Blueprint::findOrFail($blueprint_id);
+
+        //Removing the blueprint image
+        $file_path = public_path().'/'.$blueprint->path;
+        unlink($file_path);
+
+        //delete record
+        $blueprint->delete();
+
+        return redirect('/blueprints');
     }
 }
