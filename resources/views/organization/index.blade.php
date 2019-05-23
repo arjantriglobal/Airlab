@@ -3,25 +3,23 @@
     <div class="bg-white p-2">
         @if($user->role == 2)
             <div class="container-fluid" id="container" style="min-width:800px;">
-                <h1>Manage Organizations</h1>
+                <h1>Organisaties beheren</h1>
 
                 <a href="{{ url('organization/create')}}" id="user_info">
-                    <button class="btn btn-info">Add organization</button>
+                    <button class="btn btn-info">Voeg organisatie toe</button>
                 </a>
                 <br /><br />
                 <table class="table table-striped table-bordered">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th>Naam</th>
+                        <th>Bewerk</th>
+                        <th>Verwijder</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($organizations as $organization)
                         <tr>
-                            <td>{{$organization->id}}</td>
                             <td>{{$organization->name}}</td>
                             <td>
                                 <a href="{{url('/organization/'.$organization->id.'/edit')}}">

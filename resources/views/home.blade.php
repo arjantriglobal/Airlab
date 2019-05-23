@@ -6,7 +6,7 @@
             <div class="col-md-12 col-lg-2">
                 <div class="form-group">
                     <select class="form-control" onchange="selectOrganization(this);">
-                        <option value="0">Selecteer organizatie</option>
+                        <option value="0">Selecteer organisatie</option>
                         @foreach ($organizations as $organization)
                             <option value="{{ $organization->id }}">{{ $organization->name }}</option>
                         @endforeach

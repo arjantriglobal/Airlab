@@ -35,6 +35,7 @@
             @guest
                 <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt"></i></a>
             @else
+                <h4 class="text-white my-0 mx-1">{{Auth::user()->name}}</h4>
                 <a href="/profile"><i class="fas fa-user-alt"></i></a>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i></a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

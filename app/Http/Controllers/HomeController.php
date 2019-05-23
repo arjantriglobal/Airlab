@@ -30,11 +30,12 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
+        $organizations = [];
 
         if($role == 2){
-            $organizations = Organization::all();
+            $organizations  = Organization::all();
         }else{
-            $organizations = $user->organizations;
+            $organizations[] = $user->organization;
         }
 
         $blueprints = [];
