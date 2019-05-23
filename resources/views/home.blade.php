@@ -254,6 +254,7 @@
                 changeName(blueprint.id, newname, function(res){
                     $(".blueprintTitle[data-id=" + blueprint.id + "]").text(newname);
                     $("#changeBlueprintNameModal").modal("hide");
+                    blueprint.name = newname;
                 });
             });
         })
@@ -286,7 +287,6 @@
         }
 
         function selectBlueprint(blueprintid){
-            console.log(blueprintid);
             var blueprints = document.querySelectorAll("[data-blueprint]");
             blueprints.forEach(function(blueprint){
                 if(blueprintid === "0"){
@@ -330,8 +330,6 @@
                 canvas.width = img.naturalWidth;
                 canvas.height = img.naturalHeight;
                 var ratio = (canvas.clientWidth / canvas.width);
-                console.log(ratio);
-                //canvas.style.height = (canvas.clientWidth * ratio);
                 context.drawImage(img, 0,0);
                 getBlueprintDevices(selected_blueprint.id, function(devices){
                     if(devices){

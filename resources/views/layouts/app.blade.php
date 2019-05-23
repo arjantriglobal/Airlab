@@ -51,15 +51,13 @@
             <a href="/devices"><span>Apparaten</span><i class="fas fa-laptop"></i></a>
             <a href="/organizations"><span>Organizations</span><i class="fas fa-sitemap"></i></a>
         </div>
+        <span class="copyright">&#169;Airlab 2019</span>
     </nav>
     <main>
         <div class="{{ !empty($nopadding) && $nopadding ? "" : "p-2"}}">
             @yield('content')
         </div>
     </main>
-    <footer>
-        <span class="copyright">&#169;Airlab 2019</span>
-    </footer>
     <script type="text/javascript">
 
         /* this code block is for the header of the page */
