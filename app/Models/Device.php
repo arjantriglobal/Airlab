@@ -35,20 +35,20 @@ class Device extends Model
     $record = $this->getLastRecord();
     if(isset($record)){
       $status->value = 1;
-      $status->messages = ["All values are great!"];
+      $status->messages = ["De luchtkwaliteit is uitstekend!"];
       $warn = [];
       $dang = [];
       //Check warning for temperature
       if($record['temperature'] <= 20 || $record['temperature'] >= 27){
-        $warn[] = "Temprature is " . (round($record['temperature']) <= 20 ? "less then 20" : "greater then 27") . "℃";
+        $warn[] = "De temperatuur is " . (round($record['temperature']) <= 20 ? "lager dan 20" : "hoger dan 27") . "℃";
       }
       //Check danger for temprature
       if($record['temperature'] <= 10 || $record['temperature'] >= 40){
-        $dang[] = "Temprature is " . (round($record['temperature']) <= 20 ? "less then 10" : "greater then 40") . "℃";
+        $dang[] = "De temperatuur is " . (round($record['temperature']) <= 20 ? "lager dan 10" : "hoger dan 40") . "℃";
       }
       //Check warning for relative humidity
       if($record['relative_humidity'] <= 30 || $record['relative_humidity'] >= 50){
-        $warn[] = "Relative humidity is " . (round($record['temperature']) <= 20 ? "less then 30" : "greater then 50") . "%";
+        $warn[] = "De luchtvochtigheid is " . (round($record['temperature']) <= 20 ? "lager dan 30" : "hoger dan 50") . "%";
       }
 
       if(count($warn) > 0 || count($dang) > 0){

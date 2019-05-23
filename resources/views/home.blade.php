@@ -354,14 +354,21 @@
                                                 statusclass = "shadow-danger";
                                             break;
                                         }
-                                        el.classList.add("device", "shadow", statusclass);
-                                        deviceContainer.appendChild(el);
-                                            $("#" + el.id).popover({
-                                            placement: 'top',
-                                            animation: true,
-                                            trigger: 'hover',
-                                            title: device.name,
-                                            content: message
+                                        getLastRecord(device.id, function(record){
+                                            el.classList.add("device", "shadow", statusclass);
+                                            deviceContainer.appendChild(el);
+                                                $("#" + el.id).popover({
+                                                placement: 'top',
+                                                animation: true,
+                                                html: true,
+                                                trigger: 'hover',
+                                                title: device.name,
+                                                content: ""+
+                                                    "<div class='popoverstyle'>" + 
+                                                        "<p class='m-0'>" + message + "</p><hr class='m-1 w-100' />"+
+                                                        "<span style='font-size: 6pt; float: right;'>Bijgewerkt op: " + record.created_at + "</span>"+
+                                                    "</div>"
+                                            });
                                         });
                                     }
                                 });
