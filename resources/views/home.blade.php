@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid mt-5">
         <div class="row">
-            <div class="col-2">
+            <div class="col-md-12 col-lg-2">
                 <div class="form-group">
                     <select class="form-control" onchange="selectOrganization(this);">
                         <option value="0">Selecteer organizatie</option>
@@ -23,9 +23,10 @@
                             <div class="d-block" data-organization="{{$organization->id}}">
                                 @foreach ($organization->blueprints as $blueprint)
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <span class="p-1">{{ $blueprint->name }}</span>
+                                        <span data-id="{{$blueprint->id}}" class="p-1 blueprintTitle">{{ $blueprint->name }}</span>
                                         <div>
-                                            <button class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
+                                            <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
+                                            <button data-id="{{ $blueprint->id }}" class="p-1 btn btn-link changeBlueprintName"><i class="fas fa-pencil-alt"></i></button>
                                             <button class="p-1 btn btn-link text-danger" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-trash-alt"></i></button>
                                         </div>
                                     </div>
@@ -35,7 +36,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-md-12 col-lg-8">
                 <div class="card p-2">
                     <div id="blueprint">
                         <canvas></canvas>
@@ -43,7 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-md-12 col-lg-2">
                 <div class="p-2 card">
                     <h3 class="p-1">Apparaten</h3>
                     @foreach ($blueprints as $blueprint)
@@ -56,9 +57,9 @@
                             <div class="d-block" data-blueprint="{{$blueprint->id}}">
                                 @foreach($blueprint->devices as $device)
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <span class="p-1">{{ $device->name }}</span>
+                                        <span class="p-1 deviceTitle">{{ $device->name }}</span>
                                         <div>
-                                            <button class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
+                                            <button data-id="{{$device->id}}" class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
                                             <button class="p-1 btn btn-link text-danger" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-trash-alt"></i></button>
                                         </div>
                                     </div>
@@ -71,7 +72,7 @@
         </div>
     </div>
 
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-5 d-none">
         <div class="row justify-content-center">
             <div class="row">
                 <div class="col-md-4">
@@ -206,9 +207,56 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')    
+    <div class="modal fade" id="changeBlueprintNameModal" tabindex="-1" role="dialog" aria-labelledby="changeNameModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="changeNameModalLabel">Naam wijzigen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control" name="blueprintName" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnChangeName">Opslaan</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
         var blueprints = {!! json_encode($blueprints) !!};
         var selected_blueprint = null;
+
+        $(document).ready(function(){
+            $(".changeBlueprintName").on("click", function(){
+                var blueprintid = parseInt($(this).attr("data-id"));
+                $("#btnChangeName").attr("data-id", blueprintid);
+                var blueprint = blueprints.find(function(blueprint){
+                    return blueprint.id === blueprintid;
+                })
+                $("#changeBlueprintNameModal").find("input[name='blueprintName']").val(blueprint.name);
+                $("#changeBlueprintNameModal").modal("show");
+            });
+
+            $("#btnChangeName").on("click", function(){
+                var blueprintid = parseInt($(this).attr("data-id"));
+                var blueprint = blueprints.find(function(blueprint){
+                    return blueprint.id === blueprintid;
+                })
+                var newname = $("#changeBlueprintNameModal").find("input[name='blueprintName']").val();
+                changeName(blueprint.id, newname, function(res){
+                    $(".blueprintTitle[data-id=" + blueprint.id + "]").text(newname);
+                    $("#changeBlueprintNameModal").modal("hide");
+                });
+            });
+        })
 
         function selectOrganization(select){
             var organizations = document.querySelectorAll("[data-organization]");
@@ -281,8 +329,9 @@
             img.onload = function(){
                 canvas.width = img.naturalWidth;
                 canvas.height = img.naturalHeight;
-                var ratio = (context.width / context.height);
-                canvas.style.height = (canvas.clientWidth * ratio);
+                var ratio = (canvas.clientWidth / canvas.width);
+                console.log(ratio);
+                //canvas.style.height = (canvas.clientWidth * ratio);
                 context.drawImage(img, 0,0);
                 getBlueprintDevices(selected_blueprint.id, function(devices){
                     if(devices){
@@ -290,8 +339,8 @@
                             (function(){
                                 var el = document.createElement("div");
                                 el.id="device"+device.id;
-                                el.style.top = device.top_pixel + "px";
-                                el.style.left = device.left_pixel + "px";
+                                el.style.top = (device.top_pixel * ratio) + "px";
+                                el.style.left = (device.left_pixel * ratio) + "px";
                                 el.setAttribute("data-id", device.id);
                                 getDeviceStatus(device.id, function(data){
                                     if(data){
@@ -325,6 +374,14 @@
             }
         }
 
+        var resizeTimeout = null;
+        window.onresize = function(){
+            if(resizeTimeout) clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function(){
+                toggleBlueprint(selected_blueprint.id);
+            }, 400);
+        }
+
         function getLastRecord(deviceid, cb){
             getRequest("/api/devices/" + deviceid + "/lastrecord", cb);
         }
@@ -335,6 +392,10 @@
 
         function getBlueprintDevices(blueprintid, cb){
             getRequest("/api/blueprints/" + blueprintid + "/devices", cb);
+        }
+
+        function changeName(blueprintid, name, cb){
+            ApiRequest("/api/blueprints/"+ blueprintid + "/name", "POST", {name: name}, cb);
         }
 
         function getRequest(url, cb){
@@ -350,8 +411,24 @@
             xhttp.open("GET", url, true);
             xhttp.send();
         }
-    </script>
-@endsection
-@section('scripts')
 
+        function ApiRequest(url, method, data, cb){
+            var url = "{{ env('APP_URL') }}"+ url;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                cb(xhttp.response);
+            };
+            xhttp.onerror = function(){
+                cb(null);
+            }
+            xhttp.responseType = 'json';
+            xhttp.open(method, url, true);
+            if(data){
+                xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhttp.send(JSON.stringify(data));
+            }else{
+                xhttp.send();
+            }
+        }
+    </script>
 @endsection

@@ -14,6 +14,8 @@ Route::group([
     Route::get('blueprints','Api\BlueprintApiController@blueprints');
     Route::get('blueprints/{id}', 'Api\BlueprintApiController@blueprint');
     Route::get('blueprints/{id}/devices', 'Api\BlueprintApiController@devices');
+    Route::post('blueprints/{id}/name', 'Api\BlueprintApiController@changeName');
+    Route::delete('blueprints/{id}', 'Api\BlueprintApiController@delete');
 
     /*
     

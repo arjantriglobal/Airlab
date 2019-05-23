@@ -24,8 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        /*$schedule->command('uhoo:scraper')
-            ->quarterly();*/
+        //$schedule->command('uhoo:scraper')->quarterly();
 
         /*$schedule->command('uhoo:scraper')
             ->everyMinute();*/
