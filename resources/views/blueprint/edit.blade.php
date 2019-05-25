@@ -5,12 +5,22 @@
             <div class="container-fluid" id="container" style="min-width:800px;">
                 <h1>Bewerk Blueprint - {{$blueprint->name}}</h1>
 
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                {{$error}}<br>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form method="post" action="{{action('BlueprintController@update', $blueprint->id)}}" enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-group">
                         <label class="col-form-label">Organisatie</label>
-                        <select class="form-control m-bot15" name="organization_id">
+                        <select class="form-control m-bot15" name="organization">
                             <option value=""></option>
                             @foreach($organizations as $organization)
                                 <option @if($organization->id == $blueprint->organization_id) selected @endif value="{{$organization->id}}">{{$organization->name}}</option>

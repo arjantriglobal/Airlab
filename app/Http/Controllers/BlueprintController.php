@@ -272,19 +272,19 @@ class BlueprintController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'organization' => 'required',
+            'name' => 'required',
+            'uploaded_file' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
+        ]);
+
         // Handle File Upload
         if($request->hasFile('uploaded_file')) {
-            // Get filename with extension
-            $filenameWithExt = $request->file('uploaded_file')->getClientOriginalName();
-
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-
             // Get just ext
             $extension = $request->file('uploaded_file')->getClientOriginalExtension();
 
             //Filename to store
-            $fileNameToStore = $filename.'.'.$extension;
+            $fileNameToStore = bin2hex(random_bytes(16)).'.'.$extension;
 
             // Store the file
             $path = $request->file('uploaded_file')->storeAs('public/', $fileNameToStore);
@@ -294,7 +294,7 @@ class BlueprintController extends Controller
         $blueprint = new Blueprint();
 
         $blueprint->name = $request->name;
-        $blueprint->organization_id = $request->organization_id;
+        $blueprint->organization_id = $request->organization;
         $blueprint->path = str_replace("//", "/", "storage/".$fileNameToStore);
         $blueprint->created_at = date("Y-m-d H:i:s");
         $blueprint->updated_at = date("Y-m-d H:i:s");
@@ -320,24 +320,21 @@ class BlueprintController extends Controller
 
     public function update(Request $request, $blueprint_id)
     {
-        $blueprint = Blueprint::findOrFail($blueprint_id);
+        $request->validate([
+            'organization' => 'required',
+            'name' => 'required'
+        ]);
 
-        /*$file_path = public_path().'/'.$blueprint->path;
-        unlink($file_path);*/
+
+        $blueprint = Blueprint::findOrFail($blueprint_id);
 
         // Handle File Upload
         if($request->hasFile('uploaded_file')) {
-            // Get filename with extension
-            $filenameWithExt = $request->file('uploaded_file')->getClientOriginalName();
-
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-
             // Get just ext
             $extension = $request->file('uploaded_file')->getClientOriginalExtension();
 
             //Filename to store
-            $fileNameToStore = $filename.'.'.$extension;
+            $fileNameToStore = bin2hex(random_bytes(16)).'.'.$extension;
 
             // Store the file
             $path = $request->file('uploaded_file')->storeAs('public/', $fileNameToStore);
@@ -346,7 +343,7 @@ class BlueprintController extends Controller
             unlink($file_path);
         }
 
-        $blueprint->organization_id = $request->organization_id;
+        $blueprint->organization_id = $request->organization;
         $blueprint->name = $request->name;
         $blueprint->path = str_replace("//", "/", "storage/".$fileNameToStore);
 
