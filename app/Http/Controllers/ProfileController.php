@@ -38,10 +38,15 @@ class ProfileController extends Controller
 
     public function addUser(Request $request)
     {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+
         $user = new User();
 
-        $user->role = $request->role_id;
-        $user->organization_id = $request->organization_id;
+        $user->role = $request->role;
+        $user->organization_id = $request->organization;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -59,11 +64,11 @@ class ProfileController extends Controller
         $user = User::where("id", "=", $request->user_id)->first();
 
         //Change user fields
-        if (!empty($request->organization_id))
-            $user->organization_id = $request->organization_id;
+        if (!empty($request->organization))
+            $user->organization_id = $request->organization;
 
-        if (!empty($request->role_id))
-            $user->role = $request->role_id;
+        if (!empty($request->role))
+            $user->role = $request->role;
 
         if (!empty($request->name))
             $user->name = $request->name;
