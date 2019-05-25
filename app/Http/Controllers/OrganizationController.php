@@ -39,6 +39,10 @@ class OrganizationController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
         $organization = new Organization();
 
         $organization->name = $request->name;
@@ -65,6 +69,10 @@ class OrganizationController extends Controller
 
     public function update(Request $request, $organization_id)
     {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
         $organization = Organization::findOrFail($organization_id);
 
         $organization->name = $request->name;

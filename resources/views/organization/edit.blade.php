@@ -5,6 +5,16 @@
             <div class="container-fluid" id="container" style="min-width:800px;">
                 <h1>Bewerk Organisatie - {{$organization->name}}</h1>
 
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                {{$error}}<br>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form method="post" action="{{action('OrganizationController@update', $organization->id)}}">
                     @csrf
 

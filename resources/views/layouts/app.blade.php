@@ -50,7 +50,8 @@
             <a href="/home"><span>Dashboard</span><i class="fas fa-home"></i></a>
             <a href="/profile"><span>Profiel</span><i class="fas fa-user-alt"></i></a>
             <a href="/devices"><span>Apparaten</span><i class="fas fa-laptop"></i></a>
-            <a href="/organizations"><span>Organizations</span><i class="fas fa-sitemap"></i></a>
+            <a href="/organizations"><span>Organisaties</span><i class="fas fa-sitemap"></i></a>
+            <a href="/blueprints"><span>Plattegronden</span><i class="fas fa-map-pin"></i></a>
         </div>
         <span class="copyright">&#169;Airlab 2019</span>
     </nav>

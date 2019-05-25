@@ -38,10 +38,15 @@ class ProfileController extends Controller
 
     public function addUser(Request $request)
     {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+
         $user = new User();
 
-        $user->role = $request->role_id;
-        $user->organization_id = $request->organization_id;
+        $user->role = $request->role;
+        $user->organization_id = $request->organization;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -59,11 +64,11 @@ class ProfileController extends Controller
         $user = User::where("id", "=", $request->user_id)->first();
 
         //Change user fields
-        if (!empty($request->organization_id))
-            $user->organization_id = $request->organization_id;
+        if (!empty($request->organization))
+            $user->organization_id = $request->organization;
 
-        if (!empty($request->role_id))
-            $user->role = $request->role_id;
+        if (!empty($request->role))
+            $user->role = $request->role;
 
         if (!empty($request->name))
             $user->name = $request->name;
@@ -78,40 +83,6 @@ class ProfileController extends Controller
 
         //Save user and redirect to profile page.
         $user->save();
-
-        return redirect('/profile');
-    }
-
-    public function uploadBlueprint(Request $request)
-    {
-        // Handle File Upload
-        if($request->hasFile('uploaded_file')) {
-            // Get filename with extension
-            $filenameWithExt = $request->file('uploaded_file')->getClientOriginalName();
-
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-
-            // Get just ext
-            $extension = $request->file('uploaded_file')->getClientOriginalExtension();
-
-            //Filename to store
-            $fileNameToStore = $filename.'.'.$extension;
-
-            // Store the file
-            $path = $request->file('uploaded_file')->storeAs('public/', $fileNameToStore);
-        }
-
-        // Create a User using User model
-        $blueprint = new Blueprint();
-
-        $blueprint->name = $request->name;
-        $blueprint->organization_id = $request->organization_id;
-        $blueprint->path = str_replace("//", "/", "storage/".$fileNameToStore);
-        $blueprint->created_at = date("Y-m-d H:i:s");
-        $blueprint->updated_at = date("Y-m-d H:i:s");
-
-        $blueprint->save();
 
         return redirect('/profile');
     }

@@ -29,3 +29,10 @@ Route::post('/profile/change', 'ProfileController@changeProfile')->name('changeP
 Route::post('/profile/adduser', 'ProfileController@addUser')->name('addUser');
 Route::post('/profile/uploadblueprint', 'ProfileController@uploadBlueprint')->name('uploadBlueprint');
 
+//Blueprints
+Route::get('/blueprints', 'BlueprintController@index')->name('blueprints');
+Route::get('/blueprint/create', 'BlueprintController@create');
+Route::post('/blueprint/create', 'BlueprintController@store');
+Route::get('/blueprint/{blueprint_id}/edit', 'BlueprintController@edit');
+Route::post('/blueprint/{blueprint_id}/edit', 'BlueprintController@update');
+Route::get('/blueprint/{blueprint_id}/delete', 'BlueprintController@delete');
