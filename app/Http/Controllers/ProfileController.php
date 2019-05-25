@@ -81,38 +81,4 @@ class ProfileController extends Controller
 
         return redirect('/profile');
     }
-
-    public function uploadBlueprint(Request $request)
-    {
-        // Handle File Upload
-        if($request->hasFile('uploaded_file')) {
-            // Get filename with extension
-            $filenameWithExt = $request->file('uploaded_file')->getClientOriginalName();
-
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-
-            // Get just ext
-            $extension = $request->file('uploaded_file')->getClientOriginalExtension();
-
-            //Filename to store
-            $fileNameToStore = $filename.'.'.$extension;
-
-            // Store the file
-            $path = $request->file('uploaded_file')->storeAs('public/', $fileNameToStore);
-        }
-
-        // Create a User using User model
-        $blueprint = new Blueprint();
-
-        $blueprint->name = $request->name;
-        $blueprint->organization_id = $request->organization_id;
-        $blueprint->path = str_replace("//", "/", "storage/".$fileNameToStore);
-        $blueprint->created_at = date("Y-m-d H:i:s");
-        $blueprint->updated_at = date("Y-m-d H:i:s");
-
-        $blueprint->save();
-
-        return redirect('/profile');
-    }
 }
