@@ -40,9 +40,6 @@
                         <a href="#" id="register_user">
                             <button class="btn btn-info">Registreer</button>
                         </a>
-                        <a href="#" id="upload_blueprint">
-                            <button class="btn btn-info">Plattegrond uploaden</button>
-                        </a>
                         <a href="#" id="user_info">
                             <button class="btn btn-info">Gebruikersinformatie</button>
                         </a>
@@ -88,38 +85,6 @@
                                 <div class="row">
                                     <div class="col-2 offset-9">
                                         <button type="submit" class="btn btn-success">Registreer</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div id="upload_blueprint_div" style="display:none;">
-                            <form method="post" action="{{url('/profile/uploadblueprint')}}" enctype="multipart/form-data">
-                                @csrf
-
-                                <div class="form-group">
-                                    <label class="col-form-label">Organisatie</label>
-                                    <select class="form-control m-bot15" name="organization_id">
-                                        <option value=""></option>
-                                        @foreach($organizations as $id => $name)
-                                            <option value="{{$id}}">{{$name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-form-label">Naam</label>
-                                    <input class="form-control m-bot15" type="text" name="name"/>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-form-label">Bestand</label>
-                                    <input type="file" name="uploaded_file" id="uploaded_file" />
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-2 offset-5">
-                                        <button type="submit" class="btn btn-success">Upload</button>
                                     </div>
                                 </div>
                             </form>
