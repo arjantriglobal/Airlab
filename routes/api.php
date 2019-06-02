@@ -17,6 +17,11 @@ Route::group([
     Route::post('blueprints/{id}/name', 'Api\BlueprintApiController@changeName');
     Route::delete('blueprints/{id}', 'Api\BlueprintApiController@delete');
 
+    //Routes for indicator api controller
+    Route::get('indicators', 'Api\IndicatorApiController@indicators');
+    Route::get('indicators/{macaddress}', 'Api\IndicatorApiController@indicator');
+    Route::get('indicators/{macaddress}/status', 'Api\IndicatorApiController@status');
+
     /*
     
         the below routes are old and need to be refactored
