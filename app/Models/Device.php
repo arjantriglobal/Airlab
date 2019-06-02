@@ -26,6 +26,11 @@ class Device extends Model
     return $this->hasMany('App\Models\Record');
   }
 
+  public function indicators()
+  {
+    return $this->hasMany('App\Models\Indicator');
+  }
+
   public function getLastRecord(){
     return Record::where("device_id", "=", $this->id)->orderBy("created_at", "DESC")->first();
   }
