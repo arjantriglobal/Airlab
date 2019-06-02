@@ -162,20 +162,33 @@
             <div class="container-fluid" id="container" style="min-width:800px;">
                 <h1>Profiel</h1>
                 <div>
-                    <div class="form-group" data-bind="foreach: $root.currentTabData">
-                        <label for="name">Naam</label>
-                        <input type="name" class="form-control" id="name" data-bind="value : $data.name">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" data-bind="value : $data.email">
-                        <label for="Organization">Organisatie</label>
-                        <input type="Organization" class="form-control" id="Organization" data-bind="value : $data.organization" disabled="">
-                        <label for="password">Wachtwoord</label>
-                        <input type="password" class="form-control" id="password" aria-describedby="passwordDis" placeholder="Enter password" data-bind="value :$root.new_password">
-                        <small id="passwordDis" class="form-text text-muted">Vul je wachtwoord in als je je wachtwoord wilt veranderen.</small>
-                        <button type="button" class="btn btn-lg btn-success float-right" data-bind="click: $root.editProfile.bind($data)">
-                            Opslaan
-                        </button>
-                    </div>
+                    <form method="post" action="{{action('ProfileController@changeProfile', "user")}}">
+                        @csrf
+
+                        <input class="form-control m-bot15" type="hidden" name="user" value="{{Auth::user()->id}}"/>
+
+                        <div class="form-group">
+                            <label class="col-form-label">Naam</label>
+                            <input class="form-control m-bot15" type="text" name="name"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-form-label">Wachtwoord</label>
+                            <input class="form-control m-bot15" type="password" name="password" placeholder="Nieuw wachtwoord"/>
+                            <small class="form-text text-muted">Vul je nieuwe wachtwoord in als je je wachtwoord wilt veranderen.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-form-label">Email</label>
+                            <input class="form-control m-bot15" type="email" name="email"/>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-2 offset-9">
+                                <button type="submit" class="btn btn-success">Verander</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         @endif

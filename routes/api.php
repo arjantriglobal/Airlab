@@ -18,9 +18,9 @@ Route::group([
     Route::delete('blueprints/{id}', 'Api\BlueprintApiController@delete');
 
     //Routes for indicator api controller
-    Route::get('indicators', 'Api\IndicatorApiController@indicators');
-    Route::get('indicators/{macaddress}', 'Api\IndicatorApiController@indicator');
-    Route::get('indicators/{macaddress}/status', 'Api\IndicatorApiController@status');
+    Route::get('indicator', 'Api\IndicatorApiController@indicator');
+    Route::get('indicator/{macaddress}', 'Api\IndicatorApiController@indicator');
+    Route::get('indicator/{macaddress}/status', 'Api\IndicatorApiController@status');
 
     /*
     

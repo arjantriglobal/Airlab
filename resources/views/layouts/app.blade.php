@@ -27,7 +27,7 @@
 <body class="collapsed" onscroll="OnScroll(this);">
     <header>
         <div class="header-buttons">
-            <a href="#"><i class="fas fa-arrow-left"></i></a>
+            <a href="{{ URL::previous() }}"><i class="fas fa-arrow-left"></i></a>
             <a href="/"><i class="fas fa-home"></i></a>
         </div>
         <div class="header-title">{{ config('app.name', 'Laravel') }}</div>
@@ -47,11 +47,26 @@
     <nav>
         <span onclick="collapse();" class="nav-button "><i class="fas fa-bars"></i></span>
         <div class="nav-items">
-            <a href="/home"><span>Dashboard</span><i class="fas fa-home"></i></a>
-            <a href="/profile"><span>Profiel</span><i class="fas fa-user-alt"></i></a>
-            <a href="/devices"><span>Apparaten</span><i class="fas fa-laptop"></i></a>
-            <a href="/organizations"><span>Organisaties</span><i class="fas fa-sitemap"></i></a>
-            <a href="/blueprints"><span>Plattegronden</span><i class="fas fa-map-pin"></i></a>
+            @if (isset(Auth::user()->role))
+                @if (Auth::user()->role == 2)
+                    <!-- If logged in user is an Admin -->
+                    <a href="/home"><span>Dashboard</span><i class="fas fa-home"></i></a>
+                    <a href="/profile"><span>Profiel</span><i class="fas fa-user-alt"></i></a>
+                    <a href="/devices"><span>Apparaten</span><i class="fas fa-laptop"></i></a>
+                    <a href="/organizations"><span>Organisaties</span><i class="fas fa-sitemap"></i></a>
+                    <a href="/blueprints"><span>Plattegronden</span><i class="fas fa-map-pin"></i></a>
+                    <a href="/indicators"><span>Indicatoren koppelen</span><i class="fas fa-traffic-light"></i></a>
+                @else
+                    <!-- If logged in user is an Normal User -->
+                    <a href="/home"><span>Dashboard</span><i class="fas fa-home"></i></a>
+                    <a href="/profile"><span>Profiel</span><i class="fas fa-user-alt"></i></a>
+                    <a href="/blueprints"><span>Plattegronden</span><i class="fas fa-map-pin"></i></a>
+                @endif
+            @else
+
+            @endif
+
+
         </div>
         <span class="copyright">&#169;Airlab 2019</span>
     </nav>

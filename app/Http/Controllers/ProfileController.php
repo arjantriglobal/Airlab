@@ -58,17 +58,21 @@ class ProfileController extends Controller
         return redirect('/profile');
     }
 
-    public function changeProfile(Request $request)
+    public function changeProfile(Request $request, $admin_account = true)
     {
         //Get the user
-        $user = User::where("id", "=", $request->user_id)->first();
+        $user = User::where("id", "=", $request->user)->first();
 
         //Change user fields
-        if (!empty($request->organization))
-            $user->organization_id = $request->organization;
 
-        if (!empty($request->role))
-            $user->role = $request->role;
+        if ($admin_account === true)
+        {
+            if (!empty($request->organization))
+                $user->organization_id = $request->organization;
+
+            if (!empty($request->role))
+                $user->role = $request->role;
+        }
 
         if (!empty($request->name))
             $user->name = $request->name;

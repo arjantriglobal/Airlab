@@ -22,7 +22,6 @@ Route::get('/organization/{organization_id}/edit', 'OrganizationController@edit'
 Route::post('/organization/{organization_id}/edit', 'OrganizationController@update');
 Route::get('/organization/{organization_id}/delete', 'OrganizationController@delete');
 
-
 //Profile
 Route::get('/profile', 'ProfileController@index')->name('profile');
 Route::post('/profile/change', 'ProfileController@changeProfile')->name('changeProfile');
@@ -36,3 +35,8 @@ Route::post('/blueprint/create', 'BlueprintController@store');
 Route::get('/blueprint/{blueprint_id}/edit', 'BlueprintController@edit');
 Route::post('/blueprint/{blueprint_id}/edit', 'BlueprintController@update');
 Route::get('/blueprint/{blueprint_id}/delete', 'BlueprintController@delete');
+
+//Indicators
+Route::get('/indicators', 'IndicatorController@index')->name('indicator');
+Route::get('/indicator/{indicator_id}/edit', 'IndicatorController@edit');
+Route::post('/indicator/{indicator_id}/edit', 'IndicatorController@update');
