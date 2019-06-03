@@ -68,7 +68,7 @@
 
 
         </div>
-        <span class="copyright">&#169;Airlab 2019</span>
+        <span class="copyright">&#169; Airlab 2019</span>
     </nav>
     <main>
         <div class="{{ !empty($nopadding) && $nopadding ? "" : "p-2"}}">
