@@ -40,3 +40,6 @@ Route::get('/blueprint/{blueprint_id}/delete', 'BlueprintController@delete');
 Route::get('/indicators', 'IndicatorController@index')->name('indicator');
 Route::get('/indicator/{indicator_id}/edit', 'IndicatorController@edit');
 Route::post('/indicator/{indicator_id}/edit', 'IndicatorController@update');
+
+//Statuses
+Route::get('/statuses', 'DeviceController@getStatuses')->name('statuses');

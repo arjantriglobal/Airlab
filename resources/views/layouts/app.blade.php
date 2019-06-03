@@ -56,6 +56,7 @@
                     <a href="/organizations"><span>Organisaties</span><i class="fas fa-sitemap"></i></a>
                     <a href="/blueprints"><span>Plattegronden</span><i class="fas fa-map-pin"></i></a>
                     <a href="/indicators"><span>Indicatoren koppelen</span><i class="fas fa-traffic-light"></i></a>
+                    <a href="/statuses"><span>Apparaat statussen</span><i class="fas fa-thermometer-half"></i></a>
                 @else
                     <!-- If logged in user is an Normal User -->
                     <a href="/home"><span>Dashboard</span><i class="fas fa-home"></i></a>
