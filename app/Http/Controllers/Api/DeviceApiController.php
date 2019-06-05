@@ -29,4 +29,26 @@ class DeviceApiController extends Controller
         if(isset($device)) $status = $device->getStatus();
         return JsonResponse::create($status);
     }
+
+    public function positions(Request $request, $id){
+        $device = Device::find($id);
+        $updated = false;
+        if(isset($device) && isset($request->x) && isset($request->y)){
+            $device->left_pixel = $request->x;
+            $device->top_pixel = $request->y;
+            $device->save();
+            $updated = true;
+        }
+        return JsonResponse::create($updated); 
+    }
+
+    public function changename(Request $request, $id){
+        $device = Device::find($id);
+        $updated = false;
+        if(isset($device) && isset($request->name)){
+            $device->update(['name' => $request->name]);
+            $updated = true;
+        }
+        return JsonResponse::create($updated); 
+    }
 }

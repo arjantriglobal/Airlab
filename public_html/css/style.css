@@ -26,7 +26,13 @@
     position: absolute;
     cursor: pointer;
 }
-
+#blueprint .device.moveable{
+    box-shadow: none !important;
+    border: 1.5px dashed #212529;
+}
+#blueprint .device.moveable:hover{
+    cursor: move;
+}  
 .device.shadow{
     box-shadow: 0px 1px 25px 15px !important;
 }

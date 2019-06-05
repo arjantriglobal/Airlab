@@ -9,6 +9,8 @@ Route::group([
     Route::get('devices/{id}', 'Api\DeviceApiController@device');
     Route::get('devices/{id}/lastrecord', 'Api\DeviceApiController@lastrecord');
     Route::get('devices/{id}/status', 'Api\DeviceApiController@status');
+    Route::post('devices/{id}/positions', 'Api\DeviceApiController@positions');
+    Route::post('devices/{id}/name', 'Api\DeviceApiController@changename');
 
     //Routes for blueprint api controller
     Route::get('blueprints','Api\BlueprintApiController@blueprints');

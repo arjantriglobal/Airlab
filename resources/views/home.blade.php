@@ -27,7 +27,6 @@
                                         <div>
                                             <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
                                             <button data-id="{{ $blueprint->id }}" class="p-1 btn btn-link changeBlueprintName"><i class="fas fa-pencil-alt"></i></button>
-                                            <button class="p-1 btn btn-link text-danger" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-trash-alt"></i></button>
                                         </div>
                                     </div>
                                 @endforeach
@@ -46,7 +45,11 @@
             </div>
             <div class="col-md-12 col-lg-2">
                 <div class="p-2 card">
-                    <h3 class="p-1">Apparaten</h3>
+                    <h3 class="p-1">
+                        Apparaten 
+                        <button id="btnMove" class="btn btn-primary float-right" onclick="moveDevices();">Verplaats</button>
+                        <button id="btnSaveMove" class="btn btn-success float-right d-none" onclick="saveDevices();">Opslaan</button>
+                    </h3>
                     @foreach ($blueprints as $blueprint)
                         <div class="d-none" data-blueprint="-1">
                             <div class="d-flex align-items-center justify-content-between">
@@ -60,149 +63,12 @@
                                         <span class="p-1 deviceTitle">{{ $device->name }}</span>
                                         <div>
                                             <button data-id="{{$device->id}}" class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
-                                            <button class="p-1 btn btn-link text-danger" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-trash-alt"></i></button>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
                         @endif
                     @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid mt-5 d-none">
-        <div class="row justify-content-center">
-            <div class="row">
-                <div class="col-md-4">
-                    <form class="form-inline">
-                        <input class="form-control mr-1" type = "text" id = "changeName">
-                        <button type="button" class="btn btn-primary" data-bind="click:changeNameBTN">Change name</button>
-                    </form>
-                </div>
-                <div class="col-md-3" >
-                    <div class="form-group">
-                        <select class="form-control">
-
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-1">
-                        <button type="button"class="btn btn-danger" data-bind="click:deleteBP">Delete</button>
-                </div>
-                <div class="col-md-4">
-                    <div class="btn-group float-right" role="group">
-                        <button class="btn btn-info btn-md" type = 'button' data-bind="click: loadModel.bind($data, 'statData')">Show static data</button>
-                        <button class="btn btn-info btn-md" type = 'button' data-bind="click: loadModel.bind($data, 'dash')">Show blueprint</button>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <h1 class="col-8" data-bind="text: blueprintName"></h1>
-                <div class="col-2">
-                    <a class="nav-link" href="{{ url('api/blueprint/fullscreen') }}" target="_blank"><button class="btn btn-info btn-md" type = 'button'>Fullscreen</button></a>
-                </div> 
-                <div class="col-2">
-                    <div data-bind="if: showUnlocked">
-                        <a class="nav-link" href="#" data-bind="click: stopDragNDropLogic">
-                            <button class="btn btn-success"><i class="fas fa-lock-open"></i> unlocked</button>
-                        </a>
-                    </div>
-                    <div data-bind="if: showLocked">
-                        <a class="nav-link" href="#" data-bind="click: dragNDropLogic">
-                            <button id="startDnD" class="btn btn-danger"><i class="fas fa-lock"></i> locked</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="modal fade" tabindex="-1" role="dialog" id="removeDevice">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="true">Data</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="chart-tab" data-toggle="tab" href="#chart" role="tab" aria-controls="chart" aria-selected="false">Chart</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="data" role="tabpanel" aria-labelledby="data-tab">
-                                <div class="modal-header">
-                                    <div data-bind="foreach: $root.devices">
-                                        <h4 class="modal-title" data-bind="text: name"></h4>
-                                    </div>
-                                </div>
-                                <div class="modal-body">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <td>Name</td>
-                                            <td>Value</td>
-                                        </thead>
-                                        <tbody data-bind="foreach: $root.records">
-                                            <tr data-bind="css: bgColor">
-                                                <th data-bind="text: name">Temperature: </th>
-                                                <td data-bind="text: value"></td>
-                                            </tr>                
-                                        </tbody>
-                                    </table> 
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <a href="#" data-bind="click: removeDevice">
-                                        <button class="btn btn-danger" type="button">Remove device</button>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane fade" id="chart" role="tabpanel" aria-labelledby="chart-tab">
-                                <h1 data-bind="text: selectedOptionValue"></h1>
-                                <div class="dropdown">
-                                    <tr>
-                                        <td class="label">Drop-down list:</td>
-                                        <td><select data-bind="options: optionValues, value: selectedOptionValue, click: getChart"></select></td>
-                                    </tr>
-                                </div>
-                                <canvas id="myChart" height="300" width="300"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <ul class="nav flex-column">
-                <div data-bind="foreach: $root.blueprintDevices" class="nav-item">
-                    <li data-bind="text: name, attr: { id: id }, style: { top: null, left: null }" class="draggable btn btn-danger drag-drop"></li>
-                </div>
-            </ul>
-            <br>
-            <form enctype="multipart/form-data" id = "uploadForm" class="form">
-                <label>Upload:</label>
-                <input type="file" id="files" name="" placeholder="New BP" accept="image/*" data-bind="event:{change: $root.fileSelect}">
-                <label>Change:</label>
-                <input type="file" id="files" name="" placeholder="Switch BP" accept="image/*" data-bind="event:{change: $root.fileSwitch}">
-            </form>
-        </div>
-
-        <div class="row">
-            <div class="col align-self-end">
-            <div class="btn-group float-right " role="group">
-                <button class="btn btn-info btn-md" type = 'button' data-bind="click: loadModel.bind($data, 'statData')">Show static data</button>
-                <button class="btn btn-info btn-md" type = 'button' data-bind="click: loadModel.bind($data, 'dash')">Show blueprint</button>
-            </div>
-            </div>
-        </div>
-        <div style="max-width:1000px;" class="mt-4">
-            <div data-bind="foreach: allColorDevices" class="card-columns">
-                <div class="card text-white  mb-3" data-bind="css: $data.color " style="max-width: 18rem;">
-                    <div class="card-body">
-                <h5 class="card-title d-inline" data-bind="text: $data.name"></h5>
-                        <!-- <a data-toggle="modal" data-target="#editNameModal" data-id="bla"><i class="fas fa-edit d-inline float-right"></i></a>-->
-                        <p class="card-text" data-bind="text: $data.message"></p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -233,6 +99,7 @@
     <script type="text/javascript">
         var blueprints = {!! json_encode($blueprints) !!};
         var selected_blueprint = null;
+        var imageRatio = 1;
 
         $(document).ready(function(){
             $(".changeBlueprintName").on("click", function(){
@@ -261,7 +128,8 @@
 
         function selectOrganization(select){
             var organizations = document.querySelectorAll("[data-organization]");
-            organizations.forEach(function(organization){
+            for(var i = 0; i < organizations.length; i++){
+                var organization = organizations[i];
                 if(select.value === "0"){
                     if(organization.getAttribute("data-organization") === "-1"){
                         organization.classList.add("d-none");
@@ -278,7 +146,7 @@
                         organization.classList.add("d-block");
                     }
                 }
-            });
+            }
             if(document.querySelectorAll(".d-block[data-organization]").length < 1){
                 var el = document.querySelector("[data-organization='-1']");
                 el.classList.add("d-block");
@@ -288,7 +156,8 @@
 
         function selectBlueprint(blueprintid){
             var blueprints = document.querySelectorAll("[data-blueprint]");
-            blueprints.forEach(function(blueprint){
+            for(var i =0; i < blueprints.length; i++){
+                var blueprint = blueprints[i];
                 if(blueprintid === "0"){
                     if(blueprint.getAttribute("data-blueprint") === "-1"){
                         blueprint.classList.add("d-none");
@@ -305,7 +174,7 @@
                         blueprint.classList.add("d-block");
                     }
                 }
-            });
+            }
             if(document.querySelectorAll(".d-block[data-blueprint]").length < 1){
                 var el = document.querySelector("[data-blueprint='-1']");
                 el.classList.add("d-block");
@@ -313,11 +182,82 @@
             }
         }
 
+        function saveDevices(){
+            var btnSaveMove = document.getElementById("btnSaveMove");
+            var btnMove = document.getElementById("btnMove");
+            btnMove.classList.remove("d-none");
+            btnSaveMove.classList.add("d-none");
+
+            $(".devices")[0].onmousemove = null;
+            $(".devices")[0].onmouseup = null;
+            $(".devices .device").each(function(){
+                $(this).removeClass("moveable");
+                this.onmousedown = null;
+                this.ondrag = null;
+                var deviceid = this.getAttribute("data-id");
+                var left = this.offsetLeft / imageRatio;
+                var top = this.offsetTop / imageRatio;
+                savePositions(deviceid, left, top, function(done){
+                    if(done){
+                    }
+                });
+            });
+        }
+
+        function moveDevices(){
+            var btnSaveMove = document.getElementById("btnSaveMove");
+            var btnMove = document.getElementById("btnMove");
+            btnMove.classList.add("d-none");
+            btnSaveMove.classList.remove("d-none");
+
+            var selected_sensor = null;
+            var difX = 0;
+            var difY = 0;
+            var offset = $(".devices").offset();
+
+            $(".devices")[0].onmousemove = function(e){
+                if(selected_sensor != null){
+                    var left = e.pageX - offset.left - difX;
+                    var top = e.pageY - offset.top - difY;
+                    if(left < 0){
+                        selected_sensor.style.left = "0px";
+                    }else if(left > (this.offsetWidth - selected_sensor.offsetWidth)){
+                        selected_sensor.style.left = (this.offsetWidth - selected_sensor.offsetWidth) + "px"
+                    }else{
+                        selected_sensor.style.left = left + "px";
+                    }
+                    if(top < 0){
+                        selected_sensor.style.top = "0px";
+                    }else if(top > (this.offsetHeight - selected_sensor.offsetHeight)){
+                        selected_sensor.style.top = (this.offsetHeight - selected_sensor.offsetHeight) + "px"
+                    }else{
+                        selected_sensor.style.top = top + "px";
+                    }
+                }
+            }
+            $(".devices")[0].onmouseup = function(e){
+                selected_sensor = null;
+            }
+            $(".devices .device").each(function(){
+                $(this).addClass("moveable");
+                this.onmousedown = function(e){
+                    selected_sensor = this;
+                    var left = e.pageX - offset.left;
+                    var top = e.pageY - offset.top;
+                    difX = left - selected_sensor.offsetLeft;
+                    difY = top - selected_sensor.offsetTop;
+                }
+                this.ondrag = function(){};
+            });
+        }
+
         function toggleBlueprint(blueprintid){
             selectBlueprint(blueprintid+"");
-            selected_blueprint = blueprints.find(function(blueprint){
-                return blueprint.id === blueprintid;
-            })
+            for(i = 0; i < blueprints.length; i++){
+                if(blueprints[i].id == blueprintid){
+                    selected_blueprint = blueprints[i];
+                }
+            }
             var blueprintContainer = document.getElementById('blueprint');
             var deviceContainer = blueprintContainer.querySelector(".devices");
             deviceContainer.innerHTML = "";
@@ -329,17 +269,19 @@
             img.onload = function(){
                 canvas.width = img.naturalWidth;
                 canvas.height = img.naturalHeight;
-                var ratio = (canvas.clientWidth / canvas.width);
+                imageRatio = (canvas.clientWidth / canvas.width);
                 context.drawImage(img, 0,0);
                 getBlueprintDevices(selected_blueprint.id, function(devices){
                     if(devices){
-                        devices.forEach(function(device) {
+                        for(var i = 0; i < devices.length; i++){
                             (function(){
+                                var device = devices[i];
                                 var el = document.createElement("div");
                                 el.id="device"+device.id;
-                                el.style.top = (device.top_pixel * ratio) + "px";
-                                el.style.left = (device.left_pixel * ratio) + "px";
+                                el.style.top = (device.top_pixel * imageRatio) + "px";
+                                el.style.left = (device.left_pixel * imageRatio) + "px";
                                 el.setAttribute("data-id", device.id);
+                                deviceContainer.appendChild(el);
                                 getDeviceStatus(device.id, function(data){
                                     if(data){
                                         var message = data.messages[0], statusclass = "shadow-secondary";
@@ -356,7 +298,6 @@
                                         }
                                         getLastRecord(device.id, function(record){
                                             el.classList.add("device", "shadow", statusclass);
-                                            deviceContainer.appendChild(el);
                                                 $("#" + el.id).popover({
                                                 placement: 'top',
                                                 animation: true,
@@ -364,16 +305,16 @@
                                                 trigger: 'hover',
                                                 title: device.name,
                                                 content: ""+
-                                                    "<div class='popoverstyle'>" + 
-                                                        "<p class='m-0'>" + message + "</p><hr class='m-1 w-100' />"+
-                                                        "<span style='font-size: 6pt; float: right;'>Bijgewerkt op: " + record.created_at + "</span>"+
-                                                    "</div>"
+                                                "<div class='popoverstyle'>" + 
+                                                    "<p class='m-0'>" + message + "</p><hr class='m-1 w-100' />"+
+                                                    "<span style='font-size: 6pt; float: right;'>Bijgewerkt op: " + record.created_at + "</span>"+
+                                                "</div>"
                                             });
                                         });
                                     }
                                 });
                             })();
-                        });
+                        }
                     }
                 });
             }
@@ -403,6 +344,10 @@
             ApiRequest("/api/blueprints/"+ blueprintid + "/name", "POST", {name: name}, cb);
         }
 
+        function savePositions(deviceid, x, y, cb){
+            ApiRequest("/api/devices/"+ deviceid + "/positions", "POST", {x: x, y: y}, cb);
+        }
+
         function getRequest(url, cb){
             var url = "{{ env('APP_URL') }}"+ url;
             var xhttp = new XMLHttpRequest();
@@ -412,8 +357,8 @@
             xhttp.onerror = function(){
                 cb(null);
             }
-            xhttp.responseType = 'json';
             xhttp.open("GET", url, true);
+            xhttp.responseType = 'json';
             xhttp.send();
         }
 
@@ -426,8 +371,8 @@
             xhttp.onerror = function(){
                 cb(null);
             }
-            xhttp.responseType = 'json';
             xhttp.open(method, url, true);
+            xhttp.responseType = 'json';
             if(data){
                 xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhttp.send(JSON.stringify(data));
