@@ -38,7 +38,7 @@
                         <select class="form-control m-bot15" name="organization">
                             <option value=""></option>
                             @foreach($organizations as $organization)
-                                <option @if($organization->id == $device->organization_id) selected @endif value="{{$organization->id}}">{{$organization->name}}</option>
+                                <option @if(!empty($device->organization_id) && $organization->id == $device->organization_id) selected @endif value="{{$organization->id}}">{{$organization->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -48,7 +48,7 @@
                         <select class="form-control m-bot15" name="blueprint">
                             <option value=""></option>
                             @foreach($blueprints as $blueprint)
-                                <option @if($blueprint->id == $device->blueprint_id) selected @endif value="{{$blueprint->id}}">{{$blueprint->name}}</option>
+                                <option @if(!empty($device->blueprint_id) && $blueprint->id == $device->blueprint_id) selected @endif value="{{$blueprint->id}}">{{$blueprint->name}}</option>
                             @endforeach
                         </select>
                     </div>

@@ -38,8 +38,6 @@ class DeviceController
     {
         $request->validate([
             'name' => 'required',
-            'organization' => 'required',
-            'blueprint' => 'required'
         ]);
 
         $device = Device::findOrFail($device_id);
