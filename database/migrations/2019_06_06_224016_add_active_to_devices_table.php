@@ -17,7 +17,7 @@ class AddActiveToDevicesTable extends Migration
             $table->integer("active")
                 ->nullable(false)
                 ->after('organization_id')
-                ->default('1');
+                ->default(0);
         });
     }
 
