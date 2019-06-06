@@ -13,6 +13,7 @@
                 <thead>
                 <tr>
                     <th>Naam</th>
+                    <th>Organisatie</th>
                     <th>Bewerk</th>
                     @if($user->role == 2)
                         <th>Verwijder</th>
@@ -23,6 +24,7 @@
                 @foreach($blueprints as $bp)
                     <tr>
                         <td>{{$bp->name}}</td>
+                        <td>{{$bp->organization->name}}</td>
                         <td>
                             <a href="{{url('/blueprint/'.$bp->id.'/edit')}}">
                                 <i style="font-size:20px;" class="fa fa-pencil-alt"></i>

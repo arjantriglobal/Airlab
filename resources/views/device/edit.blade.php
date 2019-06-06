@@ -34,16 +34,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-form-label">Organisatie</label>
-                        <select class="form-control m-bot15" name="organization">
-                            <option value=""></option>
-                            @foreach($organizations as $organization)
-                                <option @if(!empty($device->organization_id) && $organization->id == $device->organization_id) selected @endif value="{{$organization->id}}">{{$organization->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
                         <label class="col-form-label">Plattegrond</label>
                         <select class="form-control m-bot15" name="blueprint">
                             <option value=""></option>

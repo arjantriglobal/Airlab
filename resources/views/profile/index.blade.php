@@ -5,14 +5,14 @@
             <div class="container-fluid" id="container" style="min-width:800px;">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="profiles-tab" data-toggle="tab" href="#profiles" role="tab" aria-controls="profile" aria-selected="true">Profielen</a>
+                        <a class="nav-link {{$errors->any() ? "" : "active"}}" id="profiles-tab" data-toggle="tab" href="#profiles" role="tab" aria-controls="profile" aria-selected="true">Profielen</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="admin-tab" data-toggle="tab" href="#administrator" role="tab" aria-controls="administrator" aria-selected="false">Administrator</a>
+                        <a class="nav-link {{$errors->any() ? "active" : ""}}" id="admin-tab" data-toggle="tab" href="#administrator" role="tab" aria-controls="administrator" aria-selected="false">Administrator</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="profiles" role="tabpanel" aria-labelledby="profiles-tab">
+                    <div class="tab-pane fade {{$errors->any() ? "" : "show active"}}" id="profiles" role="tabpanel" aria-labelledby="profiles-tab">
                         <h1>Alle profielen</h1>
 
                         <table class="table table-striped table-bordered">
@@ -34,7 +34,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="administrator" role="tabpanel" aria-labelledby="admin-tab">
+                    <div class="tab-pane fade {{$errors->any() ? "show active" : ""}}" id="administrator" role="tabpanel" aria-labelledby="admin-tab">
                         <h1>Admin</h1>
 
                         <a href="#" id="register_user">

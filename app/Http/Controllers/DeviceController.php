@@ -41,13 +41,23 @@ class DeviceController
         ]);
 
         $device = Device::findOrFail($device_id);
+        $blueprint = Blueprint::find($request->blueprint);
 
         $device->name = $request->name;
-        $device->organization_id = $request->organization;
-        $device->blueprint_id = $request->blueprint;
+
+        if (isset($blueprint))
+        {
+            $device->organization_id = $blueprint->organization_id;
+            $device->blueprint_id = $request->blueprint;
+
+        }
+        else
+        {
+            $device->organization_id = null;
+            $device->blueprint_id = null;
+        }
 
         $device->updated_at = date("Y-m-d H:i:s");
-
         $device->save();
 
         return redirect('/devices');

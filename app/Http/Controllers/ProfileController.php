@@ -63,6 +63,10 @@ class ProfileController extends Controller
         //Get the user
         $user = User::where("id", "=", $request->user)->first();
 
+        $request->validate([
+            'email' => 'unique:users',
+        ]);
+
         //Change user fields
 
         if ($admin_account === true)
