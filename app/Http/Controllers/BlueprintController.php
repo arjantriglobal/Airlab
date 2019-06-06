@@ -340,7 +340,11 @@ class BlueprintController extends Controller
             $path = $request->file('uploaded_file')->storeAs('public/', $fileNameToStore);
 
             $file_path = public_path().'/'.$blueprint->path;
-            unlink($file_path);
+
+            if (file_exists($file_path))
+            {
+                unlink($file_path);
+            }
         }
 
         $blueprint->organization_id = $request->organization;
@@ -359,7 +363,11 @@ class BlueprintController extends Controller
 
         //Removing the blueprint image
         $file_path = public_path().'/'.$blueprint->path;
-        unlink($file_path);
+
+        if (file_exists($file_path))
+        {
+            unlink($file_path);
+        }
 
         //delete record
         $blueprint->delete();

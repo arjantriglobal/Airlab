@@ -19,8 +19,8 @@
                     @foreach($devices as $device)
                         <tr>
                             <td>{{$device->name}}</td>
-                            <td>{{$device->organization->name}}</td>
-                            <td>{{$device->blueprint->name}}</td>
+                            <td>@if(!empty($device->organization_id)) {{$device->organization->name}} @endif</td>
+                            <td>@if(!empty($device->blueprint_id)) {{$device->blueprint->name}} @endif</td>
                             <td>
                                 <a href="{{url('/device/'.$device->id.'/edit')}}">
                                     <i style="font-size:20px;" class="fa fa-pencil-alt"></i>
