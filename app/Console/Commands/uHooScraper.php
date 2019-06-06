@@ -72,6 +72,7 @@ class uHooScraper extends Command
             if (isset($device->serial_number)) {
                 $response = uHooAdapter::GetLatestData($device->serial_number);
                 $Timestamp = new \DateTime("@$response->Timestamp");
+                $Timestamp->setTimezone(new \DateTimeZone("Europe/Amsterdam"));
                 $r = Record::where('created_at', '=', $Timestamp)
                     ->where('id', '=', $device->id)
                     ->get();
