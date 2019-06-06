@@ -37,7 +37,7 @@ class DeviceController
     public function update(Request $request, $device_id)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required'
         ]);
 
         $device = Device::findOrFail($device_id);
