@@ -49,3 +49,6 @@ Route::post('/indicator/{indicator_id}/edit', 'IndicatorController@update');
 
 //Statuses
 Route::get('/statuses', 'DeviceController@getStatuses')->name('statuses');
+
+//Ajax call for updating device active or non active
+Route::get( 'ajax/device/setActiveOrInactive', 'DeviceController@setActiveOrInactive' );

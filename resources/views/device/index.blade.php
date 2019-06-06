@@ -12,7 +12,7 @@
                         <th>Organisatie</th>
                         <th>Plattegrond</th>
                         <th>Bewerk</th>
-                        <th>Verwijder</th>
+                        <th>Actief/Niet actief</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -27,9 +27,10 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="{{url('/device/'.$device->id.'/delete')}}">
+                                {{--<a href="{{url('/device/'.$device->id.'/delete')}}">
                                     <i style="font-size:20px;" class="fa fa-trash-alt"></i>
-                                </a>
+                                </a>--}}
+                                <input class="devicesToggleButton" @if($device->active) {{"checked"}}  @endif type="checkbox" data-id="{{$device->id}}" data-toggle="toggle" data-on="Enabled" data-off="Disabled">
                             </td>
 
                         </tr>
@@ -39,5 +40,8 @@
             </div>
         @endif
     </div>
+@endsection
 
+@section("scripts")
+    <script type="text/javascript" src="{{ URL::asset('js/devices.js') }}"></script>
 @endsection

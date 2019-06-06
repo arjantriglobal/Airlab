@@ -63,6 +63,23 @@ class DeviceController
         return redirect('/devices');
     }
 
+    public function setActiveOrInactive(Request $request)
+    {
+        $device = Device::findOrFail($request->id);
+
+        if ($request->setactive)
+        {
+            $device->active = 1;
+        }
+        else
+        {
+            $device->active = 0;
+        }
+
+        $device->updated_at = date("Y-m-d H:i:s");
+        $device->save();
+    }
+
     public function getStatuses()
     {
         $user = Auth::user();

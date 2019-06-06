@@ -61,7 +61,6 @@
                     <!-- If logged in user is an Normal User -->
                     <a href="/home"><span>Dashboard</span><i class="fas fa-home"></i></a>
                     <a href="/profile"><span>Profiel</span><i class="fas fa-user-alt"></i></a>
-                    <a href="/blueprints"><span>Plattegronden</span><i class="fas fa-map-pin"></i></a>
                 @endif
             @else
 
