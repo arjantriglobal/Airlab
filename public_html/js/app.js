@@ -1003,7 +1003,7 @@ module.exports = function bind(fn, thisArg) {
 var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
 function E() {
-  this.message = 'String contains an invalid character';
+  this.message = 'String bevat een ongeldig teken';
 }
 E.prototype = new Error;
 E.prototype.code = 5;

@@ -58,25 +58,25 @@ class ApiController extends Controller
                 $deviceData = Record::where('device_id', $device['id'])->orderByRaw('created_at DESC')->first();
                 if(isset($deviceData)){
                     $color = "bg-success";
-                    $message = "All values are great!";
+                    $message = "Alle waarden zijn geweldig!";
                     //Check warning for temperature
                     if($deviceData['temperature'] <= 20 || $deviceData['temperature'] >= 27){
                         $color = "bg-warning";
-                        $message = "The temperature is under the 20 degrees or above the 27 degrees";
+                        $message = "De temperatuur is onder de 20 graden of boven de 27 graden";
                     }
                     //Check danger for temprature
                     if($deviceData['temperature'] <= 10 || $deviceData['temperature'] >= 40){
                         $color = "bg-danger";
-                        $message = "The temperature is under de 10 degrees or above the 40 degrees";
+                        $message = "De temperatuur ligt onder de 10 graden of boven de 40 graden";
                     }
                     //Check warning for relative humidity
                     if($deviceData['relative_humidity'] <= 30 || $deviceData['relative_humidity'] >= 50){
                         $color = "bg-warning";
-                        $message = "The  humidity is under the 30% or above 50%";
+                        $message = "De luchtvochtigheid is onder de 30% of boven de 50%";
                     }
                 }else{
                     $color = "bg-secondary";
-                    $message = "There is no data for this device";
+                    $message = "Er is geen data voor dit apparaat";
                 }
 
                 //set color by device

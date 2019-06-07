@@ -36,7 +36,7 @@ class Device extends Model
   }
 
   public function getStatus(){
-    $status = (Object)["value" => 0, "messages" => ["Device is offline."]];
+    $status = (Object)["value" => 0, "messages" => ["Apparaat is offline."]];
     $record = $this->getLastRecord();
     if(isset($record)){
       $status->value = 1;
