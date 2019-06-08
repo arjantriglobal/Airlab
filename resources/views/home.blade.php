@@ -4,35 +4,52 @@
     <div class="container-fluid mt-5">
         <div class="row">
             <div class="col-md-12 col-lg-2">
-                <div class="form-group">
-                    <select class="form-control" onchange="selectOrganization(this);">
-                        <option value="0">Selecteer organisatie</option>
-                        @foreach ($organizations as $organization)
-                            <option value="{{ $organization->id }}">{{ $organization->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+
+                @if ($user->role == 2)
+                    <div class="form-group">
+                        <select class="form-control" onchange="selectOrganization(this);">
+                            <option value="0">Selecteer organisatie</option>
+                            @foreach ($organizations as $organization)
+                                <option value="{{ $organization->id }}">{{ $organization->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
                 <div class="p-2 card">
                     <div class="d-none" data-organization="-1">
                         <div class="d-flex align-items-center justify-content-between">
                             <span class="p-1">Geen plattegrond(en) beschikbaar</span>
                         </div>
                     </div>
-                    @foreach ($organizations as $organization) 
-                        @if(count($organization->blueprints) > 0)   
-                            <div class="d-block" data-organization="{{$organization->id}}">
-                                @foreach ($organization->blueprints as $blueprint)
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span data-id="{{$blueprint->id}}" class="p-1 blueprintTitle">{{ $blueprint->name }}</span>
-                                        <div>
-                                            <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
-                                            <button data-id="{{ $blueprint->id }}" class="p-1 btn btn-link changeBlueprintName"><i class="fas fa-pencil-alt"></i></button>
+                    @if ($user->role == 2)
+                        @foreach ($organizations as $organization)
+                            @if(count($organization->blueprints) > 0)
+                                <div class="d-block" data-organization="{{$organization->id}}">
+                                    @foreach ($organization->blueprints as $blueprint)
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span data-id="{{$blueprint->id}}" class="p-1 blueprintTitle">{{ $blueprint->name }}</span>
+                                            <div>
+                                                <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
+                                                <button data-id="{{ $blueprint->id }}" class="p-1 btn btn-link changeBlueprintName"><i class="fas fa-pencil-alt"></i></button>
+                                            </div>
                                         </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        @endforeach
+                    @else
+                        <div class="d-block" data-organization="{{$user->organization->id}}">
+                            @foreach ($blueprints as $blueprint)
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span data-id="{{$blueprint->id}}" class="p-1 blueprintTitle">{{ $blueprint->name }}</span>
+                                    <div>
+                                        <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
+                                        <button data-id="{{ $blueprint->id }}" class="p-1 btn btn-link changeBlueprintName"><i class="fas fa-pencil-alt"></i></button>
                                     </div>
-                                @endforeach
-                            </div>
-                        @endif
-                    @endforeach
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="col-md-12 col-lg-8">
@@ -47,8 +64,10 @@
                 <div class="p-2 card">
                     <h3 class="p-1">
                         Apparaten 
-                        <button id="btnMove" class="btn btn-primary float-right" onclick="moveDevices();">Verplaats</button>
-                        <button id="btnSaveMove" class="btn btn-success float-right d-none" onclick="saveDevices();">Opslaan</button>
+                        @if ($user->role == 2)
+                            <button id="btnMove" class="btn btn-primary float-right" onclick="moveDevices();">Verplaats</button>
+                            <button id="btnSaveMove" class="btn btn-success float-right d-none" onclick="saveDevices();">Opslaan</button>
+                        @endif
                     </h3>
                     @foreach ($blueprints as $blueprint)
                         <div class="d-none" data-blueprint="-1">
