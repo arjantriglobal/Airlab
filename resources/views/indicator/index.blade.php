@@ -18,13 +18,12 @@
                     @foreach($indicators as $indicator)
                         <tr>
                             <td>{{$indicator->name}}</td>
-                            <td>{{$devices[$indicator->device_id]}}</td>
+                            <td>{{ array_key_exists($indicator->device_id, $devices) ? $devices[$indicator->device_id] : ""}}</td>
                             <td>
                                 <a href="{{url('/indicator/'.$indicator->id.'/edit')}}">
                                     <i style="font-size:20px;" class="fa fa-pencil-alt"></i>
                                 </a>
                             </td>
-
                         </tr>
                     @endforeach
                     </tbody>

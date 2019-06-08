@@ -47,14 +47,13 @@ class IndicatorController
     public function update(Request $request, $indicator_id)
     {
         $request->validate([
-            'name' => 'required',
-            'device' => 'required'
+            'name' => 'required'
         ]);
 
         $indicator = Indicator::findOrFail($indicator_id);
 
         $indicator->name = $request->name;
-        $indicator->device_id = $request->device;
+        $indicator->device_id = $request->device == "" ? null : $request->device;
         $indicator->updated_at = date("Y-m-d H:i:s");
 
         $indicator->save();
