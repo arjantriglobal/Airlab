@@ -80,7 +80,9 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <span class="p-1 deviceTitle">{{ $device->name }}</span>
                                         <div>
-                                            <button data-id="{{$device->id}}" class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
+                                            @if ($user->role == 2)
+                                                <button data-id="{{$device->id}}" class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
