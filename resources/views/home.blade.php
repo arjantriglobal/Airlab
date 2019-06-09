@@ -4,37 +4,51 @@
     <div class="container-fluid mt-5">
         <div class="row">
             <div class="col-md-12 col-lg-2">
-                <div class="form-group">
-                    <select class="form-control" onchange="selectOrganization(this);">
-                        <option value="0">Selecteer organisatie</option>
-                        @foreach ($organizations as $organization)
-                            <option value="{{ $organization->id }}">{{ $organization->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+
+                @if ($user->role == 2)
+                    <div class="form-group">
+                        <select class="form-control" onchange="selectOrganization(this);">
+                            <option value="0">Selecteer organisatie</option>
+                            @foreach ($organizations as $organization)
+                                <option value="{{ $organization->id }}">{{ $organization->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
                 <div class="p-2 card">
                     <div class="d-none" data-organization="-1">
                         <div class="d-flex align-items-center justify-content-between">
                             <span class="p-1">Geen plattegrond(en) beschikbaar</span>
                         </div>
                     </div>
-                    @foreach ($organizations as $organization) 
-                        @if(count($organization->blueprints) > 0)   
-                            <div class="d-block" data-organization="{{$organization->id}}">
-                                @foreach ($organization->blueprints as $blueprint)
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <span data-id="{{$blueprint->id}}" class="p-1 blueprintTitle">{{ $blueprint->name }}</span>
-                                        <div>
-                                            <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
-                                            @if ($user->role == 2)
+                    @if ($user->role == 2)
+                        @foreach ($organizations as $organization)
+                            @if(count($organization->blueprints) > 0)
+                                <div class="d-block" data-organization="{{$organization->id}}">
+                                    @foreach ($organization->blueprints as $blueprint)
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span data-id="{{$blueprint->id}}" class="p-1 blueprintTitle">{{ $blueprint->name }}</span>
+                                            <div>
+                                                <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
                                                 <button data-id="{{ $blueprint->id }}" class="p-1 btn btn-link changeBlueprintName"><i class="fas fa-pencil-alt"></i></button>
-                                            @endif
+                                            </div>
                                         </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        @endforeach
+                    @else
+                        <div class="d-block" data-organization="{{$user->organization->id}}">
+                            @foreach ($blueprints as $blueprint)
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span data-id="{{$blueprint->id}}" class="p-1 blueprintTitle">{{ $blueprint->name }}</span>
+                                    <div>
+                                        <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
                                     </div>
-                                @endforeach
-                            </div>
-                        @endif
-                    @endforeach
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="col-md-12 col-lg-8">
@@ -48,7 +62,7 @@
             <div class="col-md-12 col-lg-2">
                 <div class="p-2 card">
                     <h3 class="p-1">
-                        Apparaten 
+                        Apparaten
                         @if ($user->role == 2)
                             <button id="btnMove" class="btn btn-primary float-right" onclick="moveDevices();">Verplaats</button>
                             <button id="btnSaveMove" class="btn btn-success float-right d-none" onclick="saveDevices();">Opslaan</button>
@@ -65,9 +79,11 @@
                                 @foreach($blueprint->devices as $device)
                                     <div class="d-flex align-items-center justify-content-between">
                                         <span class="p-1 deviceTitle">{{ $device->name }}</span>
-                                        @if ($user->role == 2)
-                                            <button data-id="{{$device->id}}" class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
-                                        @endif
+                                        <div>
+                                            @if ($user->role == 2)
+                                                <button data-id="{{$device->id}}" class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
+                                            @endif
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
@@ -78,15 +94,15 @@
         </div>
     </div>
 @endsection
-@section('scripts')    
+@section('scripts')
     <div class="modal fade" id="changeBlueprintNameModal" tabindex="-1" role="dialog" aria-labelledby="changeNameModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="changeNameModalLabel">Naam wijzigen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <h5 class="modal-title" id="changeNameModalLabel">Naam wijzigen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -94,7 +110,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
                     <button type="button" class="btn btn-primary" id="btnChangeName">Opslaan</button>
                 </div>
             </div>
@@ -129,7 +145,7 @@
                 });
             });
 
-            //resize function
+            //When opening or closing the menu, then trigger resize function
             $(".nav-button ").on("click", function(){
                 $(window).trigger('resize');
             });
@@ -297,26 +313,26 @@
                                         switch(data.value){
                                             case 1:
                                                 statusclass = "shadow-success";
-                                            break;
+                                                break;
                                             case 2:
                                                 statusclass = "shadow-warning";
-                                            break;
+                                                break;
                                             case 3:
                                                 statusclass = "shadow-danger";
-                                            break;
+                                                break;
                                         }
                                         getLastRecord(device.id, function(record){
                                             el.classList.add("device", "shadow", statusclass);
-                                                $("#" + el.id).popover({
+                                            $("#" + el.id).popover({
                                                 placement: 'top',
                                                 animation: true,
                                                 html: true,
                                                 trigger: 'hover',
                                                 title: device.name,
                                                 content: ""+
-                                                "<div class='popoverstyle'>" + 
-                                                    "<p class='m-0'>" + message + "</p><hr class='m-1 w-100' />"+
-                                                    "<span style='font-size: 6pt; float: right;'>Bijgewerkt op: " + record.created_at + "</span>"+
+                                                "<div class='popoverstyle'>" +
+                                                "<p class='m-0'>" + message + "</p><hr class='m-1 w-100' />"+
+                                                "<span style='font-size: 6pt; float: right;'>Bijgewerkt op: " + record.created_at + "</span>"+
                                                 "</div>"
                                             });
                                         });
