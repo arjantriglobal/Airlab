@@ -8,7 +8,7 @@
                         <a class="nav-link {{$errors->any() ? "" : "active"}}" id="profiles-tab" data-toggle="tab" href="#profiles" role="tab" aria-controls="profile" aria-selected="true">Profielen</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{$errors->any() ? "active" : ""}}" id="admin-tab" data-toggle="tab" href="#administrator" role="tab" aria-controls="administrator" aria-selected="false">Administrator</a>
+                        <a class="nav-link {{$errors->any() ? "active" : ""}}" id="admin-tab" data-toggle="tab" href="#administrator" role="tab" aria-controls="administrator" aria-selected="false">Accounts aanmaken/registreren</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -35,13 +35,13 @@
                         </table>
                     </div>
                     <div class="tab-pane fade {{$errors->any() ? "show active" : ""}}" id="administrator" role="tabpanel" aria-labelledby="admin-tab">
-                        <h1>Admin</h1>
+                        <h1>Accounts</h1>
 
                         <a href="#" id="register_user">
-                            <button class="btn btn-info">Registreer</button>
+                            <button class="btn btn-info">Account registreren</button>
                         </a>
                         <a href="#" id="user_info">
-                            <button class="btn btn-info">Gebruikersinformatie wijzigen</button>
+                            <button class="btn btn-info">Account wijzigen</button>
                         </a>
 
                         @if($errors->any())
