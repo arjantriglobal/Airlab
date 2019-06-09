@@ -45,6 +45,6 @@ class HomeController extends Controller
             }
         }
    
-        return view('home', ["organizations" => $organizations, "blueprints" => $blueprints]);
+        return view('home', ["organizations" => $organizations, "blueprints" => $blueprints, "user" => $user]);
     }
 }
