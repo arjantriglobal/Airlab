@@ -39,7 +39,11 @@ class ProfileController extends Controller
     public function addUser(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'email' => 'required|unique:users',
+            'organization' => 'required',
+            'role' => 'required',
+            'password' => 'required',
         ]);
 
 

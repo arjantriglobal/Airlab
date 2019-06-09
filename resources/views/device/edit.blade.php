@@ -45,7 +45,7 @@
 
                     <div class="row">
                         <div class="col-2 offset-9">
-                            <button type="submit" class="btn btn-success">Bewerk device</button>
+                            <button type="submit" class="btn btn-success">Bewerk apparaat</button>
                         </div>
                     </div>
                 </form>
