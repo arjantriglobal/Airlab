@@ -144,6 +144,11 @@
                     blueprint.name = newname;
                 });
             });
+            
+            //When opening or closing the menu, then trigger resize function
+            $(".nav-button ").on("click", function(){
+                $(window).trigger('resize');
+            });
         })
 
         function selectOrganization(select){
