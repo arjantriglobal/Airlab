@@ -26,6 +26,9 @@
                                         <span data-id="{{$blueprint->id}}" class="p-1 blueprintTitle">{{ $blueprint->name }}</span>
                                         <div>
                                             <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
+                                            @if ($user->role == 2)
+                                                <button data-id="{{ $blueprint->id }}" class="p-1 btn btn-link changeBlueprintName"><i class="fas fa-pencil-alt"></i></button>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -46,8 +49,10 @@
                 <div class="p-2 card">
                     <h3 class="p-1">
                         Apparaten 
-                        <button id="btnMove" class="btn btn-primary float-right" onclick="moveDevices();">Verplaats</button>
-                        <button id="btnSaveMove" class="btn btn-success float-right d-none" onclick="saveDevices();">Opslaan</button>
+                        @if ($user->role == 2)
+                            <button id="btnMove" class="btn btn-primary float-right" onclick="moveDevices();">Verplaats</button>
+                            <button id="btnSaveMove" class="btn btn-success float-right d-none" onclick="saveDevices();">Opslaan</button>
+                        @endif
                     </h3>
                     @foreach ($blueprints as $blueprint)
                         <div class="d-none" data-blueprint="-1">
