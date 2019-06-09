@@ -26,7 +26,6 @@
                                         <span data-id="{{$blueprint->id}}" class="p-1 blueprintTitle">{{ $blueprint->name }}</span>
                                         <div>
                                             <button class="p-1 btn btn-link text-info" onclick="toggleBlueprint({{$blueprint->id}});"><i class="fas fa-search"></i></button>
-                                            <button data-id="{{ $blueprint->id }}" class="p-1 btn btn-link changeBlueprintName"><i class="fas fa-pencil-alt"></i></button>
                                         </div>
                                     </div>
                                 @endforeach
@@ -61,9 +60,9 @@
                                 @foreach($blueprint->devices as $device)
                                     <div class="d-flex align-items-center justify-content-between">
                                         <span class="p-1 deviceTitle">{{ $device->name }}</span>
-                                        <div>
+                                        @if ($user->role == 2)
                                             <button data-id="{{$device->id}}" class="p-1 btn btn-link"><i class="fas fa-pencil-alt"></i></button>
-                                        </div>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
@@ -123,6 +122,11 @@
                     $("#changeBlueprintNameModal").modal("hide");
                     blueprint.name = newname;
                 });
+            });
+
+            //resize function
+            $(".nav-button ").on("click", function(){
+                $(window).trigger('resize');
             });
         })
 
