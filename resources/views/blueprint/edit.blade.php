@@ -42,7 +42,7 @@
 
                     <div class="row">
                         <div class="col-2 offset-5">
-                            <button type="submit" class="btn btn-success">Upload</button>
+                            <button type="submit" class="btn btn-success">Bewerk plattegrond</button>
                         </div>
                     </div>
                 </form>
