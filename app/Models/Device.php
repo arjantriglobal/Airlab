@@ -39,8 +39,8 @@ class Device extends Model
     $status = (Object)["value" => 0, "messages" => ["Apparaat is offline."]];
     $record = $this->getLastRecord();
     $now = new \DateTime();
-    $diff = $now->diff($record->created_at);
-    if(isset($record) && $diff->days < 1){
+
+    if(isset($record) && $now->diff($record->created_at)->days < 1){
       $status->value = 1;
       $status->messages = ["De luchtkwaliteit is uitstekend!"];
       $warn = [];
@@ -63,7 +63,7 @@ class Device extends Model
         if(count($dang) > 0) $status->value = 3;
         $status->messages = array_merge($dang, $warn);
       }
-    } 
+    }
     return $status;  
   }
 }
