@@ -278,6 +278,9 @@
                 $(".popover").remove();
                 $(".devices .device").popover('disable');
             }
+            this.ondragstart = function(){
+                return false;
+            }
             this.ondrag = function() {};
         });
     }

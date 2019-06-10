@@ -38,7 +38,9 @@ class Device extends Model
   public function getStatus(){
     $status = (Object)["value" => 0, "messages" => ["Apparaat is offline."]];
     $record = $this->getLastRecord();
-    if(isset($record)){
+    $now = new \DateTime();
+    $diff = $now->diff($record->created_at);
+    if(isset($record) && $diff->days < 1){
       $status->value = 1;
       $status->messages = ["De luchtkwaliteit is uitstekend!"];
       $warn = [];
