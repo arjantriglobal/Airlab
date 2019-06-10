@@ -398,6 +398,16 @@ var dashModel = function (){
         self.stopDragNDropLogic()
       }
 
+      function leaveDroppable() {
+        document.removeEventListener('mousemove', onMouseMove);
+        swal({
+          title: "ERROR!",
+          text: "Please stay inside the blueprint.",
+          icon: "error"
+        })
+        self.stopDragNDropLogic()
+      }
+
       // get coordinates when mouse is moving
       function moveAt(clientX, clientY) {
         // new window-relative coordinates
@@ -449,6 +459,14 @@ var dashModel = function (){
    * Button to stop drag and drop from working
    * @return {[type]} [description]
    */
+  self.stopDragNDropLogic = function () {
+    self.showUnlocked(false)
+    self.showLocked(true)
+    $('.draggable').off("mousedown")
+    $('.draggable').remove()
+    self.blueprintdash()
+  }
+
   self.stopDragNDropLogic = function () {
     self.showUnlocked(false)
     self.showLocked(true)
