@@ -38,7 +38,7 @@
                         <select class="form-control m-bot15" name="blueprint">
                             <option value=""></option>
                             @foreach($blueprints as $blueprint)
-                                <option @if(!empty($device->blueprint_id) && $blueprint->id == $device->blueprint_id) selected @endif value="{{$blueprint->id}}">{{$blueprint->name}}</option>
+                                <option @if(!empty($device->blueprint_id) && $blueprint->id == $device->blueprint_id) selected @endif value="{{$blueprint->id}}">{{$blueprint->name}} {{"(".$blueprint->organization->name.")"}}</option>
                             @endforeach
                         </select>
                     </div>

@@ -77,6 +77,7 @@
                 @if(count($blueprint->devices) > 0 )
                 <div class="d-block" data-blueprint="{{$blueprint->id}}">
                     @foreach($blueprint->devices as $device)
+                        @if ($device->active == 0) @continue; @endif
                     <div class="d-flex align-items-center justify-content-between">
                         <span class="p-1 deviceTitle">{{ $device->name }}</span>
                         <div>
@@ -310,14 +311,17 @@
                     var devicesHtml = "";
                     for (var i = 0; i < devices.length; i++) {
                         var device = devices[i];
-                        var el = document.createElement("div");
-                        el.id = "device" + device.id;
-                        el.style.top = (device.top_pixel * imageRatio) + "px";
-                        el.style.left = (device.left_pixel * imageRatio) + "px";
-                        el.setAttribute("data-id", device.id);
-                        el.classList.add("device");
-                        console.log(el.outerHTML);
-                        devicesHtml += el.outerHTML;
+                        if (device.active == 1)
+                        {
+                            var el = document.createElement("div");
+                            el.id = "device" + device.id;
+                            el.style.top = (device.top_pixel * imageRatio) + "px";
+                            el.style.left = (device.left_pixel * imageRatio) + "px";
+                            el.setAttribute("data-id", device.id);
+                            el.classList.add("device");
+                            console.log(el.outerHTML);
+                            devicesHtml += el.outerHTML;
+                        }
                     }
                     //Add devices to dom
                     deviceContainer.innerHTML = devicesHtml;
@@ -326,39 +330,42 @@
                     for (var i = 0; i < devices.length; i++) {
                         (function(){
                             var device = devices[i];
-                            getDeviceStatus(device.id, function(data) {
-                                if (data) {
-                                    var message = data.messages[0],
-                                        statusclass = "shadow-secondary";
-                                    switch (data.value) {
-                                        case 1:
-                                            statusclass = "shadow-success";
-                                            break;
-                                        case 2:
-                                            statusclass = "shadow-warning";
-                                            break;
-                                        case 3:
-                                            statusclass = "shadow-danger";
-                                            break;
-                                    }
-                                    getLastRecord(device.id, function(record) {
-                                        var el = document.getElementById('device' + device.id);
-                                        el.classList.add("device", "shadow", statusclass);
-                                        $(el).popover({
-                                            placement: 'top',
-                                            animation: true,
-                                            html: true,
-                                            trigger: 'hover',
-                                            title: device.name,
-                                            content: "" +
+                            if (device.active == 1)
+                            {
+                                getDeviceStatus(device.id, function(data) {
+                                    if (data) {
+                                        var message = data.messages[0],
+                                            statusclass = "shadow-secondary";
+                                        switch (data.value) {
+                                            case 1:
+                                                statusclass = "shadow-success";
+                                                break;
+                                            case 2:
+                                                statusclass = "shadow-warning";
+                                                break;
+                                            case 3:
+                                                statusclass = "shadow-danger";
+                                                break;
+                                        }
+                                        getLastRecord(device.id, function(record) {
+                                            var el = document.getElementById('device' + device.id);
+                                            el.classList.add("device", "shadow", statusclass);
+                                            $(el).popover({
+                                                placement: 'top',
+                                                animation: true,
+                                                html: true,
+                                                trigger: 'hover',
+                                                title: device.name,
+                                                content: "" +
                                                 "<div class='popoverstyle'>" +
                                                 "<p class='m-0'>" + message + "</p><hr class='m-1 w-100' />" +
                                                 "<span style='font-size: 6pt; float: right;'>Bijgewerkt op: " + record.created_at + "</span>" +
                                                 "</div>"
+                                            });
                                         });
-                                    });
-                                }
-                            });
+                                    }
+                                });
+                            }
                         })();
                     }
                 }
