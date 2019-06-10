@@ -39011,8 +39011,8 @@ function getTypeIndex (type, expectedTypes) {
 }
 
 function getInvalidTypeMessage (name, value, expectedTypes) {
-  var message = "Invalid prop: type check failed for prop \"" + name + "\"." +
-    " Expected " + (expectedTypes.map(capitalize).join(', '));
+  var message = "Ongeldige prop: typecontrole mislukt voor prop \"" + name + "\"." +
+    " Verwacht " + (expectedTypes.map(capitalize).join(', '));
   var expectedType = expectedTypes[0];
   var receivedType = toRawType(value);
   var expectedValue = styleValue(value, expectedType);
@@ -39021,12 +39021,12 @@ function getInvalidTypeMessage (name, value, expectedTypes) {
   if (expectedTypes.length === 1 &&
       isExplicable(expectedType) &&
       !isBoolean(expectedType, receivedType)) {
-    message += " with value " + expectedValue;
+    message += " met waarde " + expectedValue;
   }
-  message += ", got " + receivedType + " ";
+  message += ", gekregen " + receivedType + " ";
   // check if we need to specify received value
   if (isExplicable(receivedType)) {
-    message += "with value " + receivedValue + ".";
+    message += "met waarde " + receivedValue + ".";
   }
   return message
 }
