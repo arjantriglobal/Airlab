@@ -496,3 +496,114 @@ var dashModel = function (){
   }
   self.enterPage()
 }
+
+      // When mouse is moving 
+      function onMouseMove(event) {
+        event.preventDefault()
+        moveAt(event.clientX, event.clientY);
+
+        // in a mouse event handler
+        dragElement.hidden = true;
+        let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+        dragElement.hidden = false;
+        // elemBelow is the element below the dragElement. If it's droppable, we can handle it.
+        
+        // mousemove events may trigger out of the window (when the device is dragged off-screen)
+        // if clientX/clientY are out of the window, then elementfromPoint returns null
+        if (!elemBelow) return;
+        // potential droppables are labeled with the class "droppable" (can be other logic)
+        let droppable = elemBelow.closest('#bp');
+        if (currentDroppable != droppable) { 
+          // if there are any changes
+          //   currentDroppable=null if we were not over a droppable (e.g over an empty space)
+          //   droppable=null if we're not over a droppable now, during this event
+          if (currentDroppable) {
+            // the logic to process "flying out" of the droppable (remove highlight)
+            leaveDroppable(currentDroppable);
+          }
+
+          currentDroppable = droppable;
+          if (currentDroppable) {
+            // the logic to process "flying in" of the droppable
+            enterDroppable(currentDroppable);
+          }
+        }
+      }
+      
+      // When device enters blueprint or is in blueprint
+      function enterDroppable(elem) {
+        elem.style.background = '#f3f8fa';
+      }
+
+
+
+      // get coordinates when mouse is moving
+      function moveAt(clientX, clientY) {
+        // new window-relative coordinates
+        let newX = clientX - shiftX;
+        let newY = clientY - shiftY;
+
+        dragElement.style.left = newX + 'px';
+        dragElement.style.top = newY + 'px';
+      }
+    })
+  }
+
+  /**
+   * Logic for records in chart
+   * @param  {[type]} data  [description]
+   * @param  {[type]} event [description]
+   * @return {[type]}       [description]
+   */
+  self.getChart = function(data,event) {
+    console.log(data);
+    if(event.target.value != 'Pick a value...' && self.deviceId){
+      $.get(base_url + '/api/airlab/device/records/chart/get' ,{id:self.deviceId, name:event.target.value}).done(function(data){
+        var modData = [];
+        for (var i = 0; i < data.length; i++) {
+          modData.push(data[i][event.target.value])
+        }
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+            // The data for our dataset
+            data: {
+                labels: modData,
+                datasets: [{
+                    label: "",
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: modData,
+                }]
+            },
+            // Configuration options go here
+            options: {}
+        });
+      })
+    }
+  }
+
+
+
+  /**
+  * Display blueprint and drag n drop devices onto blueprint
+  * @return {[type]} [description]
+  */
+  self.enterPage = function () {
+    // request to get user's blueprint from DB
+    $.get(base_url + '/api/blueprint/get').done(function(data){
+      for (var i = 0, d; d = data[i]; i++) {
+        self.blueprintData.push({ id:d.id, name:d.name, path:d.path.replace('public/', '')})
+      }
+      self.blueprintdash()
+    })
+
+    // request to get user info to backend
+    $.post(base_url + '/api/me', {token: self.token()}).done(function(data){
+      self.userEmail(data.email)
+      self.userOrganization(data.name)
+    })
+  }
+  self.enterPage()
+}
