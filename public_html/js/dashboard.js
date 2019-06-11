@@ -607,3 +607,46 @@ var dashModel = function (){
   }
   self.enterPage()
 }
+
+ /**
+   * [dragNDropLogic description]
+   * @return {[type]} [description]
+   */
+  self.dragNDropLogic = function () {
+    self.showUnlocked(true);
+    self.showLocked(false);
+    $('.draggable').mousedown(function(event) {
+      $('[data-toggle="popover"]').popover('hide')
+      event.preventDefault()
+      let dragElement = event.target.closest('.draggable');
+      let currentDroppable = null;
+      if (!dragElement) return;
+      let coords, shiftX, shiftY;
+      startDrag(event.clientX, event.clientY);
+      document.addEventListener('mousemove', onMouseMove);
+
+      // on drag start:
+      // remember the initial shift
+      // move the element position:fixed and a direct child of body
+      function startDrag(clientX, clientY) {
+        shiftX = clientX - dragElement.getBoundingClientRect().left;
+        shiftY = clientY - dragElement.getBoundingClientRect().top;
+        dragElement.className = "btn btn-info draggable btn-circle";
+        dragElement.style.color = 'red';
+        dragElement.style.position = 'fixed';
+        document.body.append(dragElement);
+        moveAt(clientX, clientY);
+      }
+
+      // switch to absolute coordinates at the end, to fix the element in the document and send coordinates to DB
+      function finishDrag() {
+        dragElement.style.top = parseInt(dragElement.style.top) + pageYOffset + 'px';
+        dragElement.style.left = parseInt(dragElement.style.left) + pageXOffset + 'px';
+        dragElement.style.position = 'absolute';
+        dragElement.className = "btn btn-info draggable btn-circle drag-drop";
+        document.removeEventListener('mousemove', onMouseMove);
+        dragElement.onmouseup = null;
+        //request to send device coordinations to DB
+        $.post(base_url + '/api/blueprint/coordinations/get', {blueprintData: [{left: dragElement.style.left, top: dragElement.style.top, id: self.currentBlueprint().id, device_id: dragElement.id}]}).done(function(data) {})
+      }
+
