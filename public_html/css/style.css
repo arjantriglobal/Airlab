@@ -54,3 +54,70 @@
     font-size: 8pt;
     float: right;
 }
+
+.toggle-switch .toggle-value {
+
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+
+}
+
+.toggle-switch .toggle-value:checked+label {
+    background-color: #89BE45;
+}
+
+.toggle-switch .toggle-value:checked+label:after {
+    margin-left: 30px;
+    background-color: #89BE45;
+}
+
+.toggle-switch .toggle-value+label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    padding: 2px;
+    width: 60px;
+    height: 30px;
+    background-color: #888;
+    border-radius: 30px;
+    transition: background 0.4s;
+}
+
+.toggle-switch .toggle-value+label:before {
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    right: 2px;
+    background-color: #fff;
+    border-radius: 30px;
+    transition: background 0.4s;
+}
+
+.toggle-switch .toggle-value+label:before,
+.toggle-switch .toggle-value+label:after {
+    display: block;
+    position: absolute;
+    content: "";
+}
+
+
+
+.toggle-switch .toggle-value+label:after {
+    top: 4px;
+    left: 4px;
+    bottom: 4px;
+    width: 22px;
+    background-color: #888;
+    border-radius: 22px;
+    transition: margin 0.4s, background 0.4s;
+}
+
+.toggle-switch .toggle-value+label:before,
+.toggle-switch .toggle-value+label:after {
+    display: block;
+    position: absolute;
+    content: "";
+}

@@ -11,8 +11,8 @@
                         <th>Apparaat naam</th>
                         <th>Organisatie</th>
                         <th>Plattegrond</th>
-                        <th>Bewerk</th>
                         <th>Actief/Niet actief</th>
+                        <th>Bewerk</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -22,17 +22,20 @@
                             <td>@if(!empty($device->organization_id)) {{$device->organization->name}} @endif</td>
                             <td>@if(!empty($device->blueprint_id)) {{$device->blueprint->name}} @endif</td>
                             <td>
+
+                                <div class="toggle-switch">
+                                    <input @if($device->active) {{"checked"}} @endif id="toggle-{{$device->id}}" class="toggle-value devicesToggleButton" type="checkbox" data-id="{{$device->id}}">
+                                    <label for="toggle-{{$device->id}}"></label>
+                                </div>
+                            </td>
+
+
+
+                            <td>
                                 <a href="{{url('/device/'.$device->id.'/edit')}}">
                                     <i style="font-size:20px;" class="fa fa-pencil-alt"></i>
                                 </a>
                             </td>
-                            <td>
-                                {{--<a href="{{url('/device/'.$device->id.'/delete')}}">
-                                    <i style="font-size:20px;" class="fa fa-trash-alt"></i>
-                                </a>--}}
-                                <input class="devicesToggleButton" @if($device->active) {{"checked"}}  @endif type="checkbox" data-id="{{$device->id}}" data-toggle="toggle" data-on="Enabled" data-off="Disabled">
-                            </td>
-
                         </tr>
                     @endforeach
                     </tbody>
@@ -43,5 +46,28 @@
 @endsection
 
 @section("scripts")
-    <script type="text/javascript" src="{{ URL::asset('js/devices.js') }}"></script>
+    <script>
+        $(".devicesToggleButton").click(function() {
+            var deviceId = $(this).data("id");
+
+            //set bool to see if radiobutton is checked or not.
+            if($(this).is(':checked'))
+            {
+                var checked = 1;
+            }
+            else
+            {
+                var checked = 0;
+            }
+
+            $.ajax({
+                url: "{{url("/ajax/device/setActiveOrInactive")}}",
+                method: 'get',
+                data: { id : deviceId, setactive: checked },
+                success: function( $result) {
+
+                }
+            });
+        });
+    </script>
 @endsection
